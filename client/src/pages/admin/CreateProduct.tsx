@@ -1,18 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import {
+  useNavigate,
+} from "react-router-dom";
 
 import ProductForm from "../../components/admin/ProductForm";
 
-import { useAppDispatch } from "../../hooks/reduxHooks";
+import {
+  useAppDispatch,
+} from "../../hooks/reduxHooks";
 
 import {
   createProductThunk,
 } from "../../features/product/productThunk";
 
-import type{
+import type {
   CreateProductRequest,
 } from "../../types/product";
 
 function CreateProduct() {
+
   const dispatch =
     useAppDispatch();
 
@@ -25,7 +30,9 @@ function CreateProduct() {
     ) => {
 
       await dispatch(
-        createProductThunk(data)
+        createProductThunk(
+          data
+        )
       );
 
       navigate(
@@ -34,16 +41,26 @@ function CreateProduct() {
     };
 
   return (
-    <div>
-      <h1>
-        Create Product
-      </h1>
+    <div className="min-h-screen bg-slate-100 p-6">
 
-      <ProductForm
-        onSubmit={
-          handleSubmit
-        }
-      />
+      <div className="max-w-3xl mx-auto">
+
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+
+          <h1 className="text-3xl font-bold mb-6">
+            Create Product
+          </h1>
+
+          <ProductForm
+            onSubmit={
+              handleSubmit
+            }
+          />
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

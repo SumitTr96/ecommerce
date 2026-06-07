@@ -3,16 +3,16 @@ import {
 } from "react-hook-form";
 
 import type {
+  Product,
   CreateProductRequest,
 } from "../../types/product";
 
 interface Props {
   defaultValues?:
-    Partial<CreateProductRequest>;
+    Partial<Product>;
 
   onSubmit: (
-    data:
-      CreateProductRequest
+    data: CreateProductRequest
   ) => void;
 }
 
@@ -24,29 +24,59 @@ function ProductForm({
   const {
     register,
     handleSubmit,
-  } = useForm<
-    CreateProductRequest
-  >({
-    defaultValues,
-  });
+  } =
+    useForm<CreateProductRequest>({
+      defaultValues,
+    });
 
   return (
     <form
       onSubmit={handleSubmit(
         onSubmit
       )}
+      className="space-y-5"
     >
-
       <input
-        {...register(
-          "name"
-        )}
+        {...register("name")}
+        placeholder="Product Name"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
       />
 
       <textarea
         {...register(
           "description"
         )}
+        placeholder="Description"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
+      />
+
+      <input
+        {...register(
+          "category"
+        )}
+        placeholder="Category"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
       />
 
       <input
@@ -58,18 +88,15 @@ function ProductForm({
               true,
           }
         )}
-      />
-
-      <input
-        {...register(
-          "category"
-        )}
-      />
-
-      <input
-        {...register(
-          "image"
-        )}
+        placeholder="Price"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
       />
 
       <input
@@ -81,15 +108,48 @@ function ProductForm({
               true,
           }
         )}
+        placeholder="Stock"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
       />
 
-      <button>
-        Save
+      <input
+        {...register(
+          "image"
+        )}
+        placeholder="Image URL"
+        className="
+        w-full
+        border
+        border-slate-300
+        rounded-xl
+        px-4
+        py-3
+        "
+      />
+
+      <button
+        type="submit"
+        className="
+        w-full
+        bg-indigo-600
+        text-white
+        py-3
+        rounded-xl
+        hover:bg-indigo-700
+        "
+      >
+        Save Product
       </button>
 
     </form>
   );
 }
 
-export default
-ProductForm;
+export default ProductForm;

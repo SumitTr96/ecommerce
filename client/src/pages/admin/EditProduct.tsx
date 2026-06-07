@@ -1,22 +1,34 @@
-import { useParams } from "react-router-dom";
+import {
+  useParams,
+} from "react-router-dom";
 
 import ProductForm from "../../components/admin/ProductForm";
 
-import type{
+import type {
+  Product,
   CreateProductRequest,
 } from "../../types/product";
 
 function EditProduct() {
+
   const { id } =
     useParams();
 
-  const product:
-    CreateProductRequest = {
+  const product: Product =
+    {
+      _id: id || "",
+
       name: "",
+
       description: "",
-      price: 0,
-      category: "electronics",
+
+      category:
+        "electronics",
+
       image: "",
+
+      price: 0,
+
       stock: 0,
     };
 
@@ -25,25 +37,34 @@ function EditProduct() {
       data: CreateProductRequest
     ) => {
       console.log(
-        id,
         data
       );
     };
 
   return (
-    <div>
-      <h1>
-        Edit Product
-      </h1>
+    <div className="min-h-screen bg-slate-100 p-6">
 
-      <ProductForm
-        defaultValues={
-          product
-        }
-        onSubmit={
-          handleSubmit
-        }
-      />
+      <div className="max-w-3xl mx-auto">
+
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+
+          <h1 className="text-3xl font-bold mb-6">
+            Edit Product
+          </h1>
+
+          <ProductForm
+            defaultValues={
+              product
+            }
+            onSubmit={
+              handleSubmit
+            }
+          />
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

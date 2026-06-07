@@ -1,8 +1,14 @@
-import { Link } from "react-router-dom";
-import type { Product } from "../../types/product";
+import {
+  Link,
+} from "react-router-dom";
+
+import type {
+  Product,
+} from "../../types/product";
 
 interface Props {
   products: Product[];
+
   onDelete: (
     id: string
   ) => void;
@@ -12,76 +18,101 @@ function ProductTable({
   products,
   onDelete,
 }: Props) {
+
   return (
-    <table
-      className="
-      w-full
-      border
-      "
-    >
-      <thead>
-        <tr>
-          <th>
-            Name
-          </th>
+    <div className="overflow-x-auto">
 
-          <th>
-            Price
-          </th>
+      <table className="w-full">
 
-          <th>
-            Actions
-          </th>
-        </tr>
-      </thead>
+        <thead>
+          <tr className="border-b">
 
-      <tbody>
-        {products.map(
-          (
-            product
-          ) => (
-            <tr
-              key={
-                product._id
-              }
-            >
-              <td>
-                {
-                  product.name
+            <th className="p-4 text-left">
+              Name
+            </th>
+
+            <th className="p-4 text-left">
+              Price
+            </th>
+
+            <th className="p-4 text-left">
+              Stock
+            </th>
+
+            <th className="p-4 text-left">
+              Actions
+            </th>
+
+          </tr>
+        </thead>
+
+        <tbody>
+
+          {products.map(
+            (
+              product
+            ) => (
+              <tr
+                key={
+                  product._id
                 }
-              </td>
+                className="border-b"
+              >
 
-              <td>
-                ₹
-                {
-                  product.price
-                }
-              </td>
-
-              <td>
-
-                <Link
-                  to={`/admin/products/${product._id}/edit`}
-                >
-                  Edit
-                </Link>
-
-                <button
-                  onClick={() =>
-                    onDelete(
-                      product._id
-                    )
+                <td className="p-4">
+                  {
+                    product.name
                   }
-                >
-                  Delete
-                </button>
+                </td>
 
-              </td>
-            </tr>
-          )
-        )}
-      </tbody>
-    </table>
+                <td className="p-4">
+                  ₹
+                  {
+                    product.price
+                  }
+                </td>
+
+                <td className="p-4">
+                  {
+                    product.stock
+                  }
+                </td>
+
+                <td className="p-4 flex gap-3">
+
+                  <Link
+                    to={`/admin/products/${product._id}/edit`}
+                    className="
+                    text-indigo-600
+                    "
+                  >
+                    Edit
+                  </Link>
+
+                  <button
+                    onClick={() =>
+                      onDelete(
+                        product._id
+                      )
+                    }
+                    className="
+                    text-red-600
+                    "
+                  >
+                    Delete
+                  </button>
+
+                </td>
+
+              </tr>
+            )
+          )}
+
+        </tbody>
+
+      </table>
+
+    </div>
   );
 }
 
