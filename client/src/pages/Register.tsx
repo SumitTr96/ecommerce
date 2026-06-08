@@ -1,4 +1,6 @@
-
+import {
+  useNavigate,
+} from "react-router-dom";
 import {
   useForm,
 } from "react-hook-form";
@@ -24,6 +26,9 @@ function Register() {
   const dispatch =
     useAppDispatch();
 
+      const navigate =
+    useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -38,14 +43,40 @@ function Register() {
         ),
     });
 
-  const onSubmit = (
+  const onSubmit =
+  async (
     data: RegisterFormData
   ) => {
-    dispatch(
-      registerThunk(
-        data
-      )
-    );
+
+    try {
+
+      const result =
+        await dispatch(
+          registerThunk(
+            data
+          )
+        ).unwrap();
+
+      navigate(
+        "/verify-otp",
+        {
+          state: {
+            email:
+              result.email,
+          },
+        }
+      );
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        error
+      );
+
+    }
+
   };
 
   return (

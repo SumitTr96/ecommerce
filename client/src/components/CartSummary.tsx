@@ -1,8 +1,16 @@
+import {
+  useNavigate,
+} from "react-router-dom";
+
 function CartSummary({
   total,
 }: {
   total: number;
 }) {
+
+  const navigate =
+    useNavigate();
+
   return (
     <div
       className="
@@ -19,7 +27,22 @@ function CartSummary({
         ₹{total}
       </p>
 
-      <button>
+      <button
+        onClick={() =>
+          navigate(
+            "/checkout"
+          )
+        }
+        className="
+        mt-4
+        bg-indigo-600
+        text-white
+        px-4
+        py-2
+        rounded
+        cursor-pointer
+        "
+      >
         Checkout
       </button>
     </div>

@@ -4,9 +4,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../utils/loginSchema";
 import { useAppDispatch } from "../hooks/reduxHooks";
 import { loginThunk } from "../features/auth/authThunk";
+import {
+  useNavigate,
+} from "react-router-dom";
 
 function Login() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -16,8 +20,16 @@ function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    dispatch(loginThunk(data));
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+    await dispatch(
+      loginThunk(data)
+    ).unwrap();
+
+    navigate("/products");
+  } catch (error) {
+    console.error(error);
+  }
   };
 
   return (

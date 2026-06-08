@@ -1,17 +1,21 @@
-import type { CartItem } from "../types/cart";
+
 import api from "./axios";
 
 export const syncCart =
   async (
-    items: CartItem
+    data: {
+      items: {
+        product: string;
+        quantity: number;
+      }[];
+    }
   ) => {
+
     const response =
       await api.post(
         "/cart/sync",
-        {
-          items,
-        }
-      ); 
+        data
+      );
 
     return response.data;
   };

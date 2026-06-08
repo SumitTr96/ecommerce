@@ -45,31 +45,53 @@ function Checkout() {
     async () => {
 
       const orderItems =
-        cartItems.map(
-          (item) => ({
-            productId:
-              item._id,
+  cartItems.map(
+    (item) => ({
+      product:
+        item._id,
 
-            name:
-              item.name,
+      name:
+        item.name,
 
-            price:
-              item.price,
+      price:
+        item.price,
 
-            quantity:
-              item.quantity,
-          })
-        );
+      quantity:
+        item.quantity,
+    })
+  );
 
-      await dispatch(
-        createOrderThunk({
-          items:
-            orderItems,
+      try {
 
-          totalAmount:
-            total,
-        })
-      );
+  const result =
+    await dispatch(
+      createOrderThunk({
+        items: orderItems,
+        totalAmount: total,
+      })
+    ).unwrap();
+
+  console.log(
+    "Order created:",
+    result
+  );
+
+  dispatch(
+    clearCart()
+  );
+
+  navigate(
+    "/orders"
+  );
+
+} catch (error) {
+
+  console.error(
+    "Order creation failed:",
+    error
+  );
+
+}
 
       dispatch(
         clearCart()

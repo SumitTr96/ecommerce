@@ -16,13 +16,14 @@ export interface Product {
   updatedAt?: string;
 }
 
-export type CreateProductRequest =
-  Omit<
-    Product,
-    "_id" |
-    "createdAt" |
-    "updatedAt"
-  >;
+export interface CreateProductRequest {
+  name: string;
+  description: string;
+  category: ProductCategory;
+  price: number;
+  stock: number;
+  image: FileList;
+}
 
 export type UpdateProductRequest =
   Partial<CreateProductRequest>;

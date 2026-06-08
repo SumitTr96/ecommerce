@@ -1,5 +1,5 @@
 export interface OrderItem {
-  productId: string;
+  product: string;
 
   name: string;
 
@@ -21,7 +21,7 @@ export interface Order {
 
   totalAmount: number;
 
-  status:string;
+  status: string;
 
   createdAt: string;
 

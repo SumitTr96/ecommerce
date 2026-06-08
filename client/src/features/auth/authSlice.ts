@@ -6,6 +6,7 @@ import type { User } from "../../types/user";
 
 import {
   loginThunk,
+  getProfileThunk,
 } from "./authThunk";
 
 interface AuthState {
@@ -75,7 +76,32 @@ const authSlice = createSlice({
           state.error =
             "Login Failed";
         }
-      );
+      )
+
+      .addCase(
+  getProfileThunk.fulfilled,
+  (state, action) => {
+
+    state.user =
+      action.payload.user;
+
+    state.isAuthenticated =
+      true;
+
+  }
+)
+
+.addCase(
+  getProfileThunk.rejected,
+  (state) => {
+
+    state.user = null;
+
+    state.isAuthenticated =
+      false;
+
+  }
+);
   },
 });
 

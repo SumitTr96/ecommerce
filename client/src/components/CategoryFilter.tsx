@@ -1,6 +1,8 @@
 interface Props {
   category: string;
 
+  categories: string[];
+
   onChange: (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => void;
@@ -8,6 +10,7 @@ interface Props {
 
 function CategoryFilter({
   category,
+  categories,
   onChange,
 }: Props) {
   return (
@@ -15,27 +18,28 @@ function CategoryFilter({
       value={category}
       onChange={onChange}
       className="
+      w-full
       border
-      p-2
-      rounded
+      border-slate-300
+      rounded-xl
+      px-4
+      py-3
       "
     >
       <option value="">
         All Categories
       </option>
 
-      <option value="electronics">
-        Electronics
-      </option>
-
-      <option value="fashion">
-        Fashion
-      </option>
-
-      <option value="books">
-        Books
-      </option>
-
+      {categories.map(
+        (category) => (
+          <option
+            key={category}
+            value={category}
+          >
+            {category}
+          </option>
+        )
+      )}
     </select>
   );
 }

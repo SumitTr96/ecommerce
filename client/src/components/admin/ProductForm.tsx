@@ -3,13 +3,18 @@ import {
 } from "react-hook-form";
 
 import type {
-  Product,
+  ProductCategory,
   CreateProductRequest,
 } from "../../types/product";
 
 interface Props {
-  defaultValues?:
-    Partial<Product>;
+  defaultValues?: {
+    name?: string;
+    description?: string;
+    category?: ProductCategory;
+    price?: number;
+    stock?: number;
+  };
 
   onSubmit: (
     data: CreateProductRequest
@@ -64,20 +69,49 @@ function ProductForm({
         "
       />
 
-      <input
-        {...register(
-          "category"
-        )}
-        placeholder="Category"
-        className="
-        w-full
-        border
-        border-slate-300
-        rounded-xl
-        px-4
-        py-3
-        "
-      />
+      <select
+  {...register("category")}
+  className="
+  w-full
+  border
+  border-slate-300
+  rounded-xl
+  px-4
+  py-3
+  "
+>
+  <option value="">
+    Select Category
+  </option>
+
+  <option value="electronics">
+    Electronics
+  </option>
+
+  <option value="fashion">
+    Fashion
+  </option>
+
+  <option value="books">
+    Books
+  </option>
+
+  <option value="home">
+    Home
+  </option>
+
+  <option value="gaming">
+    Gaming
+  </option>
+
+  <option value="mobiles">
+    Mobiles
+  </option>
+
+  <option value="accessories">
+    Accessories
+  </option>
+</select>
 
       <input
         type="number"
@@ -119,11 +153,12 @@ function ProductForm({
         "
       />
 
-      <input
+            <input
+        type="file"
+        accept="image/*"
         {...register(
           "image"
         )}
-        placeholder="Image URL"
         className="
         w-full
         border

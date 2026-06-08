@@ -48,15 +48,15 @@ function ProductCard({
       hover:shadow-lg
       "
     >
-      <img
-        src={product.image}
-        alt={product.name}
-        className="
-        h-56
-        w-full
-        object-cover
-        "
-      />
+          <img
+      src={`http://localhost:5000${product.image}`}
+      alt={product.name}
+      className="
+      h-56
+      w-full
+      object-cover
+      "
+    />
 
       <div className="p-4">
 

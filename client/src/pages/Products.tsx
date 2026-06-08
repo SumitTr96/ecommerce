@@ -1,68 +1,134 @@
-
-import { useState } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import ProductGrid from "../components/ProductGrid";
 import SearchBar from "../components/SearchBar";
 import CategoryFilter from "../components/CategoryFilter";
 
-import type { Product } from "../types/product";
+import api from "../api/axios";
 
-const products: Product[] = [
-  {
-    _id: "1",
-    name: "iPhone",
-    description: "",
-    category: "electronics",
-    image:
-      "https://via.placeholder.com/300",
-    price: 70000,
-    stock: 10,
-  },
-  {
-    _id: "2",
-    name: "Apple Watch",
-    description: "",
-    category: "electronics",
-    image:
-      "https://via.placeholder.com/300",
-    price: 25000,
-    stock: 15,
-  },
-];
+import type {
+  Product,
+} from "../types/product";
 
 function Products() {
-  const [search, setSearch] =
-    useState("");
 
-  const [category, setCategory] =
-    useState("");
+  const [
+    products,
+    setProducts,
+  ] = useState<Product[]>([]);
 
-  const filteredProducts =
-    products.filter((product) => {
-      const matchesSearch =
-        product.name
-          .toLowerCase()
-          .includes(
-            search.toLowerCase()
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
+
+  const [
+    search,
+    setSearch,
+  ] = useState("");
+
+  const [
+    category,
+    setCategory,
+  ] = useState("");
+
+  useEffect(() => {
+
+    const fetchProducts =
+      async () => {
+
+        try {
+
+          const response =
+            await api.get(
+              "/products"
+            );
+
+          setProducts(
+            response.data
           );
 
-      const matchesCategory =
-        category === ""
-          ? true
-          : product.category === category;
+        } catch (
+          error
+        ) {
 
-      return (
-        matchesSearch &&
-        matchesCategory
-      );
-    });
+          console.error(
+            error
+          );
+
+        } finally {
+
+          setLoading(
+            false
+          );
+
+        }
+
+      };
+
+    fetchProducts();
+
+  }, []);
+
+  const categories =
+    [
+      ...new Set(
+        products.map(
+          (product) =>
+            product.category
+        )
+      ),
+    ];
+
+  const filteredProducts =
+    products.filter(
+      (product) => {
+
+        const matchesSearch =
+          product.name
+            .toLowerCase()
+            .includes(
+              search.toLowerCase()
+            );
+
+        const matchesCategory =
+          category === ""
+            ? true
+            : product.category === category;
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+
+      }
+    );
+
+  if (loading) {
+
+    return (
+      <div
+        className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        "
+      >
+        Loading Products...
+      </div>
+    );
+
+  }
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
 
       <div className="max-w-7xl mx-auto">
 
-        {/* Hero Section */}
         <div
           className="
           bg-gradient-to-r
@@ -77,6 +143,7 @@ function Products() {
           shadow-xl
           "
         >
+
           <h1
             className="
             text-3xl
@@ -97,9 +164,9 @@ function Products() {
             Discover amazing products
             at unbeatable prices.
           </p>
+
         </div>
 
-        {/* Filters */}
         <div
           className="
           bg-white
@@ -109,6 +176,7 @@ function Products() {
           mb-8
           "
         >
+
           <div
             className="
             flex
@@ -117,7 +185,9 @@ function Products() {
             gap-4
             "
           >
+
             <div className="flex-1">
+
               <SearchBar
                 value={search}
                 onChange={(e) =>
@@ -126,79 +196,93 @@ function Products() {
                   )
                 }
               />
+
             </div>
 
             <div className="md:w-64">
+
               <CategoryFilter
                 category={category}
+                categories={categories}
                 onChange={(e) =>
                   setCategory(
                     e.target.value
                   )
                 }
               />
+
             </div>
+
           </div>
+
         </div>
 
-        {/* Product Count */}
         <div className="mb-6">
+
           <p className="text-slate-600">
-            Showing
-            {" "}
-            <span className="font-semibold text-slate-800">
-              {
-                filteredProducts.length
-              }
-            </span>
-            {" "}
-            products
-          </p>
-        </div>
 
-        {/* Products Grid */}
-        {filteredProducts.length >
-        0 ? (
-          <ProductGrid
-            products={
-              filteredProducts
-            }
-          />
-        ) : (
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            shadow-lg
-            p-12
-            text-center
-            "
-          >
-            <div className="text-6xl mb-4">
-              🔍
-            </div>
+            Showing{" "}
 
-            <h2
+            <span
               className="
-              text-2xl
               font-semibold
               text-slate-800
               "
             >
-              No Products Found
-            </h2>
+              {
+                filteredProducts.length
+              }
+            </span>
 
-            <p
-              className="
-              mt-2
-              text-slate-500
-              "
-            >
-              Try changing your search
-              or filter criteria.
-            </p>
-          </div>
-        )}
+            {" "}products
+
+          </p>
+
+        </div>
+
+        {
+          filteredProducts.length > 0
+            ? (
+              <ProductGrid
+                products={
+                  filteredProducts
+                }
+              />
+            )
+            : (
+              <div
+                className="
+                bg-white
+                rounded-3xl
+                shadow-lg
+                p-12
+                text-center
+                "
+              >
+
+                <h2
+                  className="
+                  text-2xl
+                  font-semibold
+                  text-slate-800
+                  "
+                >
+                  No Products Found
+                </h2>
+
+                <p
+                  className="
+                  mt-2
+                  text-slate-500
+                  "
+                >
+                  Try changing your
+                  search or filter.
+                </p>
+
+              </div>
+            )
+        }
 
       </div>
 
@@ -207,4 +291,3 @@ function Products() {
 }
 
 export default Products;
-

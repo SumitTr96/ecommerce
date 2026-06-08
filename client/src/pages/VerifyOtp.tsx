@@ -1,182 +1,160 @@
-
 import {
   useState,
 } from "react";
+import axios from "axios";
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  verifyOtp,
+} from "../api/authApi";
 
 function VerifyOtp() {
+
+  const navigate =
+    useNavigate();
+
+  const location =
+    useLocation();
+
+  const email =
+    location.state?.email;
+
   const [otp, setOtp] =
+    useState("");
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [error, setError] =
     useState("");
 
   const handleVerify =
     async () => {
-      console.log(otp);
+
+      try {
+
+        setLoading(
+          true
+        );
+
+        setError("");
+
+        await verifyOtp(
+          email,
+          otp
+        );
+
+        navigate(
+          "/login"
+        );
+
+      } catch (
+  err: unknown
+) {
+
+  if (
+    axios.isAxiosError(
+      err
+    )
+  ) {
+
+    setError(
+      err.response?.data
+        ?.message ??
+      "Verification failed"
+    );
+
+  } else {
+
+    setError(
+      "Verification failed"
+    );
+
+  }
+
+} finally {
+
+        setLoading(
+          false
+        );
+
+      }
+
     };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
 
-      <div className="w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-md">
 
-        <div className="grid md:grid-cols-2">
+        <h1 className="text-3xl font-bold text-center text-slate-800">
+          Verify OTP
+        </h1>
 
-          {/* Left Section */}
-          <div
-            className="
-            hidden
-            md:flex
-            flex-col
-            justify-center
-            bg-gradient-to-br
-            from-indigo-600
-            via-purple-600
-            to-pink-500
-            p-12
-            text-white
-            "
-          >
-            <h1 className="text-5xl font-extrabold mb-4">
-              ShopEase
-            </h1>
+        <p className="mt-3 text-center text-slate-500">
+          Enter the OTP sent to
+          your email
+        </p>
 
-            <p className="text-lg text-white/90">
-              Verify your identity with
-              the OTP sent to your email.
-            </p>
+        <input
+          value={otp}
+          onChange={(e) =>
+            setOtp(
+              e.target.value
+            )
+          }
+          maxLength={6}
+          placeholder="Enter OTP"
+          className="
+          mt-8
+          w-full
+          rounded-xl
+          border
+          border-slate-300
+          px-4
+          py-3
+          text-center
+          text-2xl
+          tracking-[0.5rem]
+          outline-none
+          focus:border-indigo-500
+          focus:ring-4
+          focus:ring-indigo-100
+          "
+        />
 
-            <div className="mt-10 space-y-4">
+        {error && (
+          <p className="mt-2 text-red-500 text-sm">
+            {error}
+          </p>
+        )}
 
-              <div className="flex items-center gap-3">
-                <span>✓</span>
-                <span>Secure Verification</span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span>✓</span>
-                <span>Protected Account</span>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <span>✓</span>
-                <span>Fast Authentication</span>
-              </div>
-
-            </div>
-
-          </div>
-
-          {/* Right Section */}
-          <div className="p-6 sm:p-10 lg:p-12">
-
-            <div className="md:hidden text-center mb-8">
-              <h2
-                className="
-                text-4xl
-                font-bold
-                bg-gradient-to-r
-                from-indigo-600
-                to-purple-600
-                bg-clip-text
-                text-transparent
-                "
-              >
-                ShopEase
-              </h2>
-            </div>
-
-            <h2 className="text-3xl font-bold text-slate-800">
-              Verify OTP
-            </h2>
-
-            <p className="mt-2 text-slate-500">
-              Enter the 6-digit code sent
-              to your registered email.
-            </p>
-
-            <div className="mt-8">
-
-              <label
-                className="
-                block
-                text-sm
-                font-medium
-                text-slate-700
-                mb-2
-                "
-              >
-                OTP Code
-              </label>
-
-              <input
-                value={otp}
-                onChange={(e) =>
-                  setOtp(
-                    e.target.value
-                  )
-                }
-                maxLength={6}
-                placeholder="Enter OTP"
-                className="
-                w-full
-                rounded-xl
-                border
-                border-slate-300
-                px-4
-                py-3
-                text-center
-                text-2xl
-                tracking-[0.5rem]
-                outline-none
-                transition
-                focus:border-indigo-500
-                focus:ring-4
-                focus:ring-indigo-100
-                "
-              />
-
-              <button
-                onClick={
-                  handleVerify
-                }
-                className="
-                w-full
-                mt-6
-                rounded-xl
-                bg-indigo-600
-                py-3
-                font-semibold
-                text-white
-                transition
-                hover:bg-indigo-700
-                hover:shadow-lg
-                "
-              >
-                Verify OTP
-              </button>
-
-            </div>
-
-            <div className="mt-8 text-center">
-
-              <p className="text-slate-600">
-                Didn't receive the code?
-              </p>
-
-              <button
-                className="
-                mt-2
-                font-semibold
-                text-indigo-600
-                hover:text-indigo-700
-                "
-              >
-                Resend OTP
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
+        <button
+          onClick={
+            handleVerify
+          }
+          disabled={
+            loading
+          }
+          className="
+          w-full
+          mt-6
+          rounded-xl
+          bg-indigo-600
+          py-3
+          font-semibold
+          text-white
+          hover:bg-indigo-700
+          transition
+          "
+        >
+          {loading
+            ? "Verifying..."
+            : "Verify OTP"}
+        </button>
 
       </div>
 
@@ -185,4 +163,3 @@ function VerifyOtp() {
 }
 
 export default VerifyOtp;
-

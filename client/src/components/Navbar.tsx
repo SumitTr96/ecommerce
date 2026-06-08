@@ -1,40 +1,95 @@
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 
-import { useAppSelector } from "../hooks/reduxHooks";
+import {
+  useAppSelector,
+  useAppDispatch,
+} from "../hooks/reduxHooks";
+
+import {
+  logout,
+} from "../features/auth/authSlice";
 
 function Navbar() {
-  const cartItems = useAppSelector(
-    (state) => state.cart.items
-  );
+
+  const dispatch =
+    useAppDispatch();
+
+  const cartItems =
+    useAppSelector(
+      (state) =>
+        state.cart.items
+    );
+
+  const {
+    isAuthenticated,
+    user,
+  } =
+    useAppSelector(
+      (state) =>
+        state.auth
+    );
 
   return (
-    <nav className="shadow-md">
+    <nav className="shadow-md bg-white">
 
-      <div className="container mx-auto px-6 py-4 flex justify-between">
+      <div
+        className="
+        container
+        mx-auto
+        px-6
+        py-4
+        flex
+        justify-between
+        items-center
+        "
+      >
 
         <Link
           to="/"
-          className="text-xl font-bold"
+          className="
+          text-xl
+          font-bold
+          "
         >
           Ecommerce
         </Link>
 
-        <div className="flex gap-5 items-center">
+        <div
+          className="
+          flex
+          gap-5
+          items-center
+          "
+        >
 
-          <Link to="/products">
+          <Link
+            to="/products"
+          >
             Products
           </Link>
 
-          <Link to="/orders">
-            Orders
-          </Link>
+          {isAuthenticated && (
+            <Link
+              to="/orders"
+            >
+              Orders
+            </Link>
+          )}
 
-          <Link to="/cart">
+          <Link
+            to="/cart"
+          >
 
-            <div className="relative">
+            <div
+              className="
+              relative
+              "
+            >
 
-              <FaShoppingCart size={22} />
+              <FaShoppingCart
+                size={22}
+              />
 
               <span
                 className="
@@ -48,16 +103,71 @@ function Navbar() {
                 text-xs
                 "
               >
-                {cartItems.length}
+                {
+                  cartItems.length
+                }
               </span>
 
             </div>
 
           </Link>
 
-          <Link to="/login">
-            Login
-          </Link>
+          {isAuthenticated ? (
+            <>
+
+              <span
+                className="
+                font-medium
+                "
+              >
+                {
+                  user?.name
+                }
+              </span>
+                {user?.role === "admin" && (
+              <Link
+                to="/admin/products"
+                className="
+                bg-indigo-600
+                text-white
+                px-4
+                py-2
+                rounded
+                hover:bg-indigo-700
+                transition
+                "
+              >
+                Admin
+              </Link>
+            )}
+              <button
+                onClick={() =>
+                  dispatch(
+                    logout()
+                  )
+                }
+                className="
+                bg-red-500
+                text-white
+                px-4
+                py-2
+                rounded
+                 cursor-pointer
+                hover:bg-red-600
+                transition
+                "
+              >
+                Logout
+              </button>
+
+            </>
+          ) : (
+            <Link
+              to="/login"
+            >
+              Login
+            </Link>
+          )}
 
         </div>
 
