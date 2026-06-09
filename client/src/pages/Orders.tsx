@@ -1,45 +1,25 @@
+import { useEffect } from "react";
 
-import {
-  useEffect,
-} from "react";
+import { Link } from "react-router-dom";
 
-import {
-  Link,
-} from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../hooks/reduxHooks";
-
-import {
-  fetchOrdersThunk,
-} from "../features/order/orderThunk";
+import { fetchOrdersThunk } from "../features/order/orderThunk";
 
 function Orders() {
-  const dispatch =
-    useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const orders =
-    useAppSelector(
-      (state) =>
-        state.order.orders
-    );
+  const orders = useAppSelector((state) => state.order.orders);
 
   useEffect(() => {
-    dispatch(
-      fetchOrdersThunk()
-    );
+    dispatch(fetchOrdersThunk());
   }, [dispatch]);
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
-
       <div className="max-w-6xl mx-auto">
-
         {/* Header */}
         <div className="mb-10">
-
           <h1
             className="
             text-3xl
@@ -51,10 +31,7 @@ function Orders() {
             My Orders
           </h1>
 
-          <p className="mt-2 text-slate-500">
-            View and track all your orders
-          </p>
-
+          <p className="mt-2 text-slate-500">View and track all your orders</p>
         </div>
 
         {/* Empty State */}
@@ -68,9 +45,7 @@ function Orders() {
             text-center
             "
           >
-            <div className="text-6xl mb-4">
-              📦
-            </div>
+            <div className="text-6xl mb-4">📦</div>
 
             <h2
               className="
@@ -108,15 +83,10 @@ function Orders() {
 
         {/* Orders List */}
         <div className="space-y-6">
-
-          {orders.map(
-            (order) => (
-              <Link
-                key={order._id}
-                to={`/orders/${order._id}`}
-              >
-                <div
-                  className="
+          {orders.map((order) => (
+            <Link key={order._id} to={`/orders/${order._id}`}>
+              <div
+                className="
                   bg-white
                   rounded-3xl
                   shadow-lg
@@ -129,10 +99,9 @@ function Orders() {
                   border-transparent
                   hover:border-indigo-200
                   "
-                >
-
-                  <div
-                    className="
+              >
+                <div
+                  className="
                     flex
                     flex-col
                     md:flex-row
@@ -140,68 +109,64 @@ function Orders() {
                     md:justify-between
                     gap-4
                     "
-                  >
-
-                    {/* Left */}
-                    <div>
-                      <p
-                        className="
+                >
+                  {/* Left */}
+                  <div>
+                    <p
+                      className="
                         text-sm
                         text-slate-500
                         "
-                      >
-                        Order ID
-                      </p>
+                    >
+                      Order ID
+                    </p>
 
-                      <p
-                        className="
+                    <p
+                      className="
                         font-medium
                         text-slate-800
                         break-all
                         "
-                      >
-                        {order._id}
-                      </p>
-                    </div>
+                    >
+                      {order._id}
+                    </p>
+                  </div>
 
-                    {/* Center */}
-                    <div>
-                      <p
-                        className="
+                  {/* Center */}
+                  <div>
+                    <p
+                      className="
                         text-sm
                         text-slate-500
                         "
-                      >
-                        Total Amount
-                      </p>
+                    >
+                      Total Amount
+                    </p>
 
-                      <p
-                        className="
+                    <p
+                      className="
                         text-2xl
                         font-bold
                         text-indigo-600
                         "
-                      >
-                        ₹
-                        {
-                          order.totalAmount
-                        }
-                      </p>
-                    </div>
+                    >
+                      ₹{order.totalAmount}
+                    </p>
+                  </div>
 
-                    {/* Right */}
-                    <div>
-                      <p
-                        className="
+                  {/* Right */}
+                  <div>
+                    <p
+                      className="
                         text-sm
                         text-slate-500
                         "
-                      >
-                        Status
-                      </p>
+                    >
+                      Status
+                    </p>
 
-                      <span
-                        className="
+                    <span
+                      className="
                         inline-block
                         mt-1
                         px-4
@@ -212,25 +177,18 @@ function Orders() {
                         text-sm
                         font-medium
                         "
-                      >
-                        {order.status}
-                      </span>
-                    </div>
-
+                    >
+                      {order.status}
+                    </span>
                   </div>
-
                 </div>
-              </Link>
-            )
-          )}
-
+              </div>
+            </Link>
+          ))}
         </div>
-
       </div>
-
     </div>
   );
 }
 
 export default Orders;
-

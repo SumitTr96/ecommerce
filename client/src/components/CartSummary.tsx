@@ -1,15 +1,7 @@
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function CartSummary({
-  total,
-}: {
-  total: number;
-}) {
-
-  const navigate =
-    useNavigate();
+function CartSummary({ total }: { total: number }) {
+  const navigate = useNavigate();
 
   return (
     <div
@@ -18,21 +10,12 @@ function CartSummary({
       p-5
       "
     >
-      <h2>
-        Order Summary
-      </h2>
+      <h2>Order Summary</h2>
 
-      <p>
-        Total:
-        ₹{total}
-      </p>
+      <p>Total: ₹{total}</p>
 
       <button
-        onClick={() =>
-          navigate(
-            "/checkout"
-          )
-        }
+        onClick={() => navigate("/checkout")}
         className="
         mt-4
         bg-indigo-600

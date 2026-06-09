@@ -6,9 +6,7 @@ interface Props {
   products: Product[];
 }
 
-function ProductGrid({
-  products,
-}: Props) {
+function ProductGrid({ products }: Props) {
   return (
     <div
       className="
@@ -18,10 +16,7 @@ function ProductGrid({
       "
     >
       {products.map((product) => (
-        <ProductCard
-          key={product._id}
-          product={product}
-        />
+        <ProductCard key={product._id} product={product} />
       ))}
     </div>
   );

@@ -1,13 +1,8 @@
-import {
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import {
-  fetchOrdersThunk,
-  fetchOrderThunk,
-} from "./orderThunk";
+import { fetchOrdersThunk, fetchOrderThunk } from "./orderThunk";
 
-import type{ Order } from "../../types/order";
+import type { Order } from "../../types/order";
 interface OrderState {
   orders: Order[];
 
@@ -28,55 +23,30 @@ const initialState: OrderState = {
   error: null,
 };
 
-const orderSlice =
-  createSlice({
-    name: "order",
+const orderSlice = createSlice({
+  name: "order",
 
-    initialState,
+  initialState,
 
-    reducers: {},
+  reducers: {},
 
-    extraReducers:
-      (builder) => {
+  extraReducers: (builder) => {
+    builder
 
-        builder
+      .addCase(fetchOrdersThunk.pending, (state) => {
+        state.loading = true;
+      })
 
-          .addCase(
-            fetchOrdersThunk.pending,
-            (
-              state
-            ) => {
-              state.loading =
-                true;
-            }
-          )
+      .addCase(fetchOrdersThunk.fulfilled, (state, action) => {
+        state.loading = false;
 
-          .addCase(
-            fetchOrdersThunk.fulfilled,
-            (
-              state,
-              action
-            ) => {
-              state.loading =
-                false;
+        state.orders = action.payload;
+      })
 
-              state.orders =
-                action.payload;
-            }
-          )
+      .addCase(fetchOrderThunk.fulfilled, (state, action) => {
+        state.selectedOrder = action.payload;
+      });
+  },
+});
 
-          .addCase(
-            fetchOrderThunk.fulfilled,
-            (
-              state,
-              action
-            ) => {
-              state.selectedOrder =
-                action.payload;
-            }
-          );
-      },
-  });
-
-export default
-orderSlice.reducer;
+export default orderSlice.reducer;

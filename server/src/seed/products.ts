@@ -1,41 +1,29 @@
-import Product
-from "../models/Product";
+import Product from "../models/Product";
 
-import connectDB
-from "../config/db";
+import connectDB from "../config/db";
 
-const seedProducts =
-  async () => {
+const seedProducts = async () => {
+  await connectDB();
 
-    await connectDB();
+  await Product.insertMany([
+    {
+      name: "iPhone 15",
 
-    await Product.insertMany([
-      {
-        name:
-          "iPhone 15",
+      description: "Apple Phone",
 
-        description:
-          "Apple Phone",
+      category: "electronics",
 
-        category:
-          "electronics",
+      image: "https://...",
 
-        image:
-          "https://...",
+      price: 70000,
 
-        price:
-          70000,
+      stock: 10,
+    },
+  ]);
 
-        stock:
-          10,
-      },
-    ]);
+  console.log("Products Added");
 
-    console.log(
-      "Products Added"
-    );
-
-    process.exit();
-  };
+  process.exit();
+};
 
 seedProducts();

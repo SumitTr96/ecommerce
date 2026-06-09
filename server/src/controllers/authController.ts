@@ -3,478 +3,264 @@ import bcrypt from "bcryptjs";
 import User from "../models/User";
 
 import generateOtp from "../utils/generateOtp";
-import type {
-  Request,
-  Response,
-} from "express";
+import type { Request, Response } from "express";
 
 import generateToken from "../utils/generateToken";
 
-import {
-  registerSchema,
-  loginSchema,
-} from "../validators/authValidator";
+import { registerSchema, loginSchema } from "../validators/authValidator";
 
-import {
-  sendOtp,
-} from "../services/emailService";
+import { sendOtp } from "../services/emailService";
 
 //Register
 
-export const register =
-  async (
-    req: Request,
-    res:Response
-  ) => {
+export const register = async (req: Request, res: Response) => {
+  // Request Validation (ZOD)
+  const result = registerSchema.safeParse(req.body);
 
-    // Request Validation (ZOD)
-    const result =
-  registerSchema.safeParse(
-    req.body
-  );
-
-if (!result.success) {
-  return res
-    .status(400)
-    .json({
-      errors:
-        result.error.issues,
+  if (!result.success) {
+    return res.status(400).json({
+      errors: result.error.issues,
     });
-}
-  // 
+  }
+  //
 
-    const {
-      name,
-      email,
-      password,
-    } = req.body;
+  const { name, email, password } = req.body;
 
-    const existingUser =
-      await User.findOne({
-        email,
-      });
-
-    if (
-      existingUser
-    ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "User already exists",
-        });
-    }
-
-    const hashedPassword =
-      await bcrypt.hash(
-        password,
-        10
-      );
-
-    const otp =
-      generateOtp();
-
-      await sendOtp(
-        email,
-        otp
-        );
-
-    const user =
-      await User.create({
-        name,
-        email,
-        password:
-          hashedPassword,
-        otp,
-        otpExpiry:
-          Date.now() +
-          5 * 60 * 1000,
-      });
-
-    res.status(201).json({
-      message:
-        "User created",
-      email:
-        user.email,
-    });
-  };
-
-//Login
-
-export const login =
-  async (
-    req: Request,
-    res: Response
-  ) => {
-
-    // Request validation (ZOD)
-    const result =
-  loginSchema.safeParse(
-    req.body
-  );
-
-if (!result.success) {
-  return res
-    .status(400)
-    .json({
-      errors:
-        result.error.issues,
-    });
-}
-  // 
-
-    const {
-      email,
-      password,
-    } = req.body;
-
-    const user =
-  await User.findOne({
+  const existingUser = await User.findOne({
     email,
   });
 
-if (!user) {
-  return res
-    .status(401)
-    .json({
-      message:
-        "Invalid credentials",
+  if (existingUser) {
+    return res.status(400).json({
+      message: "User already exists",
     });
-}
+  }
 
-if (
-  !user.isVerified
-) {
-  return res
-    .status(401)
-    .json({
-      message:
-        "Please verify OTP first",
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const otp = generateOtp();
+
+  await sendOtp(email, otp);
+
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+    otp,
+    otpExpiry: Date.now() + 5 * 60 * 1000,
+  });
+
+  res.status(201).json({
+    message: "User created",
+    email: user.email,
+  });
+};
+
+//Login
+
+export const login = async (req: Request, res: Response) => {
+  // Request validation (ZOD)
+  const result = loginSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      errors: result.error.issues,
     });
-}
+  }
+  //
 
-    const match =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
+  const { email, password } = req.body;
 
-    if (!match) {
-      return res
-        .status(401)
-        .json({
-          message:
-            "Invalid credentials",
-        });
-    }
+  const user = await User.findOne({
+    email,
+  });
 
-    const token =
-      generateToken(
-        user._id.toString()
-      );
+  if (!user) {
+    return res.status(401).json({
+      message: "Invalid credentials",
+    });
+  }
 
-    res.cookie(
-  "token",
-  token,
-  {
+  if (!user.isVerified) {
+    return res.status(401).json({
+      message: "Please verify OTP first",
+    });
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match) {
+    return res.status(401).json({
+      message: "Invalid credentials",
+    });
+  }
+
+  const token = generateToken(user._id.toString());
+
+  res.cookie("token", token, {
     httpOnly: true,
     sameSite: "lax",
-    secure:
-      process.env.NODE_ENV ===
-      "production",
-    maxAge:
-      7 *
-      24 *
-      60 *
-      60 *
-      1000,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  res.json({
+    token,
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified,
+    },
+  });
+};
+
+//Verify OTP
+
+export const verifyOtp = async (req: Request, res: Response) => {
+  const { email, otp } = req.body;
+
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user || user.otp !== otp) {
+    return res.status(400).json({
+      message: "Invalid OTP",
+    });
   }
-);
 
-    res.json({
-      token,
-      user: {
-    _id: user._id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    isVerified:
-      user.isVerified,
-  },
+  if (user.otpExpiry && user.otpExpiry < new Date()) {
+    return res.status(400).json({
+      message: "OTP expired",
     });
-  };
+  }
 
-  //Verify OTP
+  user.isVerified = true;
 
-  export const verifyOtp =
-  async (
-    req: Request,
-    res: Response
-  ) => {
+  user.otp = undefined;
 
-    const {
-      email,
-      otp,
-    } = req.body;
+  user.otpExpiry = undefined;
 
-    const user =
-      await User.findOne({
-        email,
-      });
+  await user.save();
 
-    if (
-      !user ||
-      user.otp !== otp
-    ) {
+  res.json({
+    message: "OTP verified",
+  });
+};
 
-      return res
-        .status(400)
-        .json({
-          message:
-            "Invalid OTP",
-        });
+// getMe
 
-    }
-
-    if (
-      user.otpExpiry &&
-      user.otpExpiry <
-        new Date()
-    ) {
-
-      return res
-        .status(400)
-        .json({
-          message:
-            "OTP expired",
-        });
-
-    }
-
-    user.isVerified =
-      true;
-
-    user.otp =
-      undefined;
-
-    user.otpExpiry =
-      undefined;
-
-    await user.save();
-
-    res.json({
-      message:
-        "OTP verified",
+export const getMe = async (req: Request, res: Response) => {
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Not authorized",
     });
-  };
+  }
 
-  // getMe
+  res.json({
+    user: req.user,
+  });
+};
 
-  export const getMe =
-  async (
-    req: Request,
-    res: Response
-  ) => {
+// Logout
 
-    if (!req.user) {
-      return res.status(401).json({
-        message: "Not authorized",
-      });
-    }
+export const logout = async (req: Request, res: Response) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    sameSite: "lax",
+  });
 
-    res.json({
-      user: req.user,
+  res.json({
+    message: "Logged out",
+  });
+};
+
+// 2FA login
+
+export const sendLoginOtp = async (req: Request, res: Response) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({
+    email,
+  });
+
+  if (!user) {
+    return res.status(401).json({
+      message: "Invalid credentials",
     });
-  };
+  }
 
-  // Logout
+  const match = await bcrypt.compare(password, user.password);
 
-  export const logout =
-  async (
-    req: Request,
-    res: Response
-  ) => {
-
-    res.clearCookie(
-      "token",
-      {
-        httpOnly: true,
-        sameSite: "lax",
-      }
-    );
-
-    res.json({
-      message:
-        "Logged out",
+  if (!match) {
+    return res.status(401).json({
+      message: "Invalid credentials",
     });
-  };
+  }
 
-  // 2FA login
+  const otp = generateOtp();
 
-  export const sendLoginOtp =
-  async (
-    req: Request,
-    res: Response
-  ) => {
+  user.otp = otp;
 
-    const {
-      email,
-      password,
-    } = req.body;
+  user.otpExpiry = new Date(Date.now() + 5 * 60 * 1000);
 
-    const user =
-      await User.findOne({
-        email,
-      });
+  await user.save();
 
-    if (!user) {
+  await sendOtp(user.email, otp);
 
-      return res
-        .status(401)
-        .json({
-          message:
-            "Invalid credentials",
-        });
+  res.json({
+    message: "Login OTP sent",
+  });
+};
 
-    }
+export const verifyLoginOtp = async (req: Request, res: Response) => {
+  const { email, otp } = req.body;
 
-    const match =
-      await bcrypt.compare(
-        password,
-        user.password
-      );
+  const user = await User.findOne({
+    email,
+  });
 
-    if (!match) {
-
-      return res
-        .status(401)
-        .json({
-          message:
-            "Invalid credentials",
-        });
-
-    }
-
-    const otp =
-      generateOtp();
-
-    user.otp =
-      otp;
-
-    user.otpExpiry =
-      new Date(
-        Date.now() +
-        5 * 60 * 1000
-      );
-
-    await user.save();
-
-    await sendOtp(
-      user.email,
-      otp
-    );
-
-    res.json({
-      message:
-        "Login OTP sent",
+  if (!user) {
+    return res.status(400).json({
+      message: "User not found",
     });
+  }
 
-  };
-
-  export const verifyLoginOtp =
-  async (
-    req: Request,
-    res: Response
-  ) => {
-
-    const {
-      email,
-      otp,
-    } = req.body;
-
-    const user =
-      await User.findOne({
-        email,
-      });
-
-    if (!user) {
-
-      return res
-        .status(400)
-        .json({
-          message:
-            "User not found",
-        });
-
-    }
-
-    if (
-      String(user.otp) !==
-      String(otp)
-    ) {
-
-      return res
-        .status(400)
-        .json({
-          message:
-            "Invalid OTP",
-        });
-
-    }
-
-    if (
-      user.otpExpiry &&
-      user.otpExpiry <
-        new Date()
-    ) {
-
-      return res
-        .status(400)
-        .json({
-          message:
-            "OTP expired",
-        });
-
-    }
-
-    user.otp =
-      undefined;
-
-    user.otpExpiry =
-      undefined;
-
-    await user.save();
-
-    const token =
-      generateToken(
-        user._id.toString()
-      );
-
-    res.cookie(
-      "token",
-      token,
-      {
-        httpOnly: true,
-        sameSite: "lax",
-        secure:
-          process.env.NODE_ENV ===
-          "production",
-      }
-    );
-
-    res.json({
-      user: {
-        _id:
-          user._id,
-        name:
-          user.name,
-        email:
-          user.email,
-        role:
-          user.role,
-        isVerified:
-          user.isVerified,
-      },
+  if (String(user.otp) !== String(otp)) {
+    return res.status(400).json({
+      message: "Invalid OTP",
     });
+  }
 
-  };
+  if (user.otpExpiry && user.otpExpiry < new Date()) {
+    return res.status(400).json({
+      message: "OTP expired",
+    });
+  }
+
+  user.otp = undefined;
+
+  user.otpExpiry = undefined;
+
+  await user.save();
+
+  const token = generateToken(user._id.toString());
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+  });
+
+  res.json({
+    user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified,
+    },
+  });
+};

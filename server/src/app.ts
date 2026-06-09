@@ -3,72 +3,40 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import authRoutes from "./routes/authRoutes";
-import adminRoutes
-from "./routes/adminRoutes";
+import adminRoutes from "./routes/adminRoutes";
 
-import {
-  notFound,
-  errorHandler,
-} from "./middleware/errorMiddleware";
+import { notFound, errorHandler } from "./middleware/errorMiddleware";
 
-import productRoutes
-from "./routes/productRoutes";
+import productRoutes from "./routes/productRoutes";
 
-import cartRoutes
-from "./routes/cartRoutes";
+import cartRoutes from "./routes/cartRoutes";
 
-import orderRoutes
-from "./routes/orderRoutes";
+import orderRoutes from "./routes/orderRoutes";
 
 const app = express();
-
 
 app.use(express.json());
 
 app.use(
   cors({
-    origin:
-      "http://localhost:5173",
+    origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 
 app.use(cookieParser());
 
-app.use(
-  "/uploads",
-  express.static(
-    path.join(
-      process.cwd(),
-      "uploads"
-    )
-  )
-);
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
-app.use(
-  "/api/auth",
-  authRoutes
-);
+app.use("/api/auth", authRoutes);
 
-app.use(
-  "/api/products",
-  productRoutes
-);
+app.use("/api/products", productRoutes);
 
-app.use(
-  "/api/cart",
-  cartRoutes
-);
+app.use("/api/cart", cartRoutes);
 
-app.use(
-  "/api/orders",
-  orderRoutes
-);
+app.use("/api/orders", orderRoutes);
 
-app.use(
-  "/api/admin",
-  adminRoutes
-);
+app.use("/api/admin", adminRoutes);
 
 app.use(notFound);
 

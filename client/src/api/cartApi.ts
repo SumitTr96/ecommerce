@@ -1,31 +1,18 @@
-
 import api from "./axios";
 
-export const syncCart =
-  async (
-    data: {
-      items: {
-        product: string;
-        quantity: number;
-      }[];
-    }
-  ) => {
+export const syncCart = async (data: {
+  items: {
+    product: string;
+    quantity: number;
+  }[];
+}) => {
+  const response = await api.post("/cart/sync", data);
 
-    const response =
-      await api.post(
-        "/cart/sync",
-        data
-      );
+  return response.data;
+};
 
-    return response.data;
-  };
+export const getCart = async () => {
+  const response = await api.get("/cart");
 
-export const getCart =
-  async () => {
-    const response =
-      await api.get(
-        "/cart"
-      );
-
-    return response.data;
-  };
+  return response.data;
+};

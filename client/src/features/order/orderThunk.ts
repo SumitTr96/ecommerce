@@ -1,57 +1,29 @@
-import {
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-import {
-  createOrder,
-  getOrders,
-  getOrder,
-} from "../../api/orderApi";
+import { createOrder, getOrders, getOrder } from "../../api/orderApi";
 
-import type {
-  Order,
-  CreateOrderRequest,
-} from "../../types/order";
+import type { Order, CreateOrderRequest } from "../../types/order";
 
-export const createOrderThunk =
-  createAsyncThunk<
-    Order,
-    CreateOrderRequest
-  >(
-    "order/create",
+export const createOrderThunk = createAsyncThunk<Order, CreateOrderRequest>(
+  "order/create",
 
-    async (
-      orderData
-    ) => {
-      return await createOrder(
-        orderData
-      );
-    }
-  );
+  async (orderData) => {
+    return await createOrder(orderData);
+  },
+);
 
-export const fetchOrdersThunk =
-  createAsyncThunk<
-    Order[]
-  >(
-    "order/fetchAll",
+export const fetchOrdersThunk = createAsyncThunk<Order[]>(
+  "order/fetchAll",
 
-    async () => {
-      return await getOrders();
-    }
-  );
+  async () => {
+    return await getOrders();
+  },
+);
 
-export const fetchOrderThunk =
-  createAsyncThunk<
-    Order,
-    string
-  >(
-    "order/fetchOne",
+export const fetchOrderThunk = createAsyncThunk<Order, string>(
+  "order/fetchOne",
 
-    async (
-      id
-    ) => {
-      return await getOrder(
-        id
-      );
-    }
-  );
+  async (id) => {
+    return await getOrder(id);
+  },
+);

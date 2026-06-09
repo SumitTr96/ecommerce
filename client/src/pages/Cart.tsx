@@ -1,28 +1,20 @@
-
 import CartItem from "../components/CartItem";
 import CartSummary from "../components/CartSummary";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { useNavigate } from "react-router-dom";
 
-
 function Cart() {
   const navigate = useNavigate();
-  const items = useAppSelector(
-    (state) => state.cart.items
-  );
+  const items = useAppSelector((state) => state.cart.items);
 
   const total = items.reduce(
-    (acc, item) =>
-      acc +
-      item.price *
-        item.quantity,
-    0
+    (acc, item) => acc + item.price * item.quantity,
+    0,
   );
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
       <div className="max-w-7xl mx-auto">
-
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-800">
@@ -35,11 +27,9 @@ function Cart() {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-
           {/* Cart Items */}
           <div className="xl:col-span-2">
             <div className="bg-white rounded-3xl shadow-lg p-6 md:p-8">
-
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-semibold text-slate-800">
                   Cart Items
@@ -53,17 +43,12 @@ function Cart() {
               {items.length > 0 ? (
                 <div className="space-y-5">
                   {items.map((item) => (
-                    <CartItem
-                      key={item._id}
-                      item={item}
-                    />
+                    <CartItem key={item._id} item={item} />
                   ))}
                 </div>
               ) : (
                 <div className="text-center py-16">
-                  <div className="text-6xl mb-4">
-                    🛒
-                  </div>
+                  <div className="text-6xl mb-4">🛒</div>
 
                   <h3 className="text-xl font-semibold text-slate-700">
                     Your cart is empty
@@ -74,9 +59,7 @@ function Cart() {
                   </p>
 
                   <button
-                  onClick={() =>
-    navigate("/products")
-  }
+                    onClick={() => navigate("/products")}
                     className="
                     mt-6
                     bg-indigo-600
@@ -93,13 +76,11 @@ function Cart() {
                   </button>
                 </div>
               )}
-
             </div>
           </div>
 
           {/* Summary */}
           <div className="xl:sticky xl:top-8 h-fit">
-
             <div
               className="
               bg-white
@@ -118,21 +99,14 @@ function Cart() {
                 py-5
                 "
               >
-                <h2 className="text-white text-xl font-bold">
-                  Order Summary
-                </h2>
+                <h2 className="text-white text-xl font-bold">Order Summary</h2>
               </div>
 
               <div className="p-6">
-                <CartSummary
-                  total={total}
-                />
+                <CartSummary total={total} />
               </div>
-
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
@@ -140,4 +114,3 @@ function Cart() {
 }
 
 export default Cart;
-

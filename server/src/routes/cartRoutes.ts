@@ -7,35 +7,16 @@ import {
   clearCart,
 } from "../controllers/cartController";
 
-import {
-  protect,
-} from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware";
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router.get(
-  "/",
-  protect,
-  getCart
-);
+router.get("/", protect, getCart);
 
-router.post(
-  "/sync",
-  protect,
-  syncCart
-);
+router.post("/sync", protect, syncCart);
 
-router.put(
-  "/",
-  protect,
-  updateCart
-);
+router.put("/", protect, updateCart);
 
-router.delete(
-  "/",
-  protect,
-  clearCart
-);
+router.delete("/", protect, clearCart);
 
 export default router;

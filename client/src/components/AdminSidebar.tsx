@@ -11,26 +11,16 @@ function AdminSidebar() {
       p-5
       "
     >
-      <h2 className="text-2xl mb-8">
-        Admin
-      </h2>
+      <h2 className="text-2xl mb-8">Admin</h2>
 
       <ul className="space-y-4">
-
         <li>
-          <Link to="/admin/products">
-            Products
-          </Link>
+          <Link to="/admin/products">Products</Link>
         </li>
 
         <li>
-          <Link
-            to="/admin/products/create"
-          >
-            Create Product
-          </Link>
+          <Link to="/admin/products/create">Create Product</Link>
         </li>
-
       </ul>
     </div>
   );

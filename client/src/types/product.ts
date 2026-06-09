@@ -1,8 +1,4 @@
-export type ProductCategory =
-  | "electronics"
-  | "fashion"
-  | "books"
-  | "home";
+export type ProductCategory = "electronics" | "fashion" | "books" | "home";
 
 export interface Product {
   _id: string;
@@ -25,5 +21,4 @@ export interface CreateProductRequest {
   image: FileList;
 }
 
-export type UpdateProductRequest =
-  Partial<CreateProductRequest>;
+export type UpdateProductRequest = Partial<CreateProductRequest>;

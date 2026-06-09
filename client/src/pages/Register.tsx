@@ -1,91 +1,45 @@
-import {
-  useNavigate,
-} from "react-router-dom";
-import {
-  useForm,
-} from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
-import {
-  zodResolver,
-} from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  registerSchema,
-  type RegisterFormData,
-} from "../utils/registerSchema";
+import { registerSchema, type RegisterFormData } from "../utils/registerSchema";
 
-import {
-  useAppDispatch,
-} from "../hooks/reduxHooks";
+import { useAppDispatch } from "../hooks/reduxHooks";
 
-import {
-  registerThunk,
-} from "../features/auth/authThunk";
+import { registerThunk } from "../features/auth/authThunk";
 
 function Register() {
-  const dispatch =
-    useAppDispatch();
+  const dispatch = useAppDispatch();
 
-      const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    formState: {
-      errors,
-    },
-  } =
-    useForm<RegisterFormData>({
-      resolver:
-        zodResolver(
-          registerSchema
-        ),
-    });
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
 
-  const onSubmit =
-  async (
-    data: RegisterFormData
-  ) => {
-
+  const onSubmit = async (data: RegisterFormData) => {
     try {
+      const result = await dispatch(registerThunk(data)).unwrap();
 
-      const result =
-        await dispatch(
-          registerThunk(
-            data
-          )
-        ).unwrap();
-
-      navigate(
-        "/verify-otp",
-        {
-          state: {
-            email:
-              result.email,
-          },
-        }
-      );
-
-    } catch (
-      error
-    ) {
-
-      console.error(
-        error
-      );
-
+      navigate("/verify-otp", {
+        state: {
+          email: result.email,
+        },
+      });
+    } catch (error) {
+      console.error(error);
     }
-
   };
 
   return (
     <div className="min-h-screen bg-slate-100 flex items-center justify-center px-4 py-8">
-
       <div className="w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl">
-
         <div className="grid md:grid-cols-2">
-
           {/* Left Section */}
           <div
             className="
@@ -101,53 +55,33 @@ function Register() {
             text-white
             "
           >
-            <h1 className="text-5xl font-extrabold mb-4">
-              ShopEase
-            </h1>
+            <h1 className="text-5xl font-extrabold mb-4">ShopEase</h1>
 
             <p className="text-lg text-white/90">
-              Create your account and
-              start shopping from
-              thousands of premium
+              Create your account and start shopping from thousands of premium
               products.
             </p>
 
             <div className="mt-10 space-y-4">
-
               <div className="flex items-center gap-3">
-                <span>
-                  ✓
-                </span>
-                <span>
-                  Secure Registration
-                </span>
+                <span>✓</span>
+                <span>Secure Registration</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <span>
-                  ✓
-                </span>
-                <span>
-                  Fast Checkout
-                </span>
+                <span>✓</span>
+                <span>Fast Checkout</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <span>
-                  ✓
-                </span>
-                <span>
-                  Track Orders
-                </span>
+                <span>✓</span>
+                <span>Track Orders</span>
               </div>
-
             </div>
-
           </div>
 
           {/* Right Section */}
           <div className="p-6 sm:p-10 lg:p-12">
-
             <div className="md:hidden text-center mb-8">
               <h2
                 className="
@@ -168,17 +102,9 @@ function Register() {
               Create Account
             </h2>
 
-            <p className="mt-2 text-slate-500">
-              Join us and start shopping
-            </p>
+            <p className="mt-2 text-slate-500">Join us and start shopping</p>
 
-            <form
-              onSubmit={handleSubmit(
-                onSubmit
-              )}
-              className="mt-8 space-y-5"
-            >
-
+            <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-5">
               {/* Name */}
               <div>
                 <label
@@ -194,9 +120,7 @@ function Register() {
                 </label>
 
                 <input
-                  {...register(
-                    "name"
-                  )}
+                  {...register("name")}
                   placeholder="John Doe"
                   className="
                   w-full
@@ -215,10 +139,7 @@ function Register() {
 
                 {errors.name && (
                   <p className="mt-1 text-sm text-red-500">
-                    {
-                      errors.name
-                        .message
-                    }
+                    {errors.name.message}
                   </p>
                 )}
               </div>
@@ -238,9 +159,7 @@ function Register() {
                 </label>
 
                 <input
-                  {...register(
-                    "email"
-                  )}
+                  {...register("email")}
                   type="email"
                   placeholder="you@example.com"
                   className="
@@ -260,10 +179,7 @@ function Register() {
 
                 {errors.email && (
                   <p className="mt-1 text-sm text-red-500">
-                    {
-                      errors.email
-                        .message
-                    }
+                    {errors.email.message}
                   </p>
                 )}
               </div>
@@ -283,9 +199,7 @@ function Register() {
                 </label>
 
                 <input
-                  {...register(
-                    "password"
-                  )}
+                  {...register("password")}
                   type="password"
                   placeholder="Enter password"
                   className="
@@ -305,10 +219,7 @@ function Register() {
 
                 {errors.password && (
                   <p className="mt-1 text-sm text-red-500">
-                    {
-                      errors.password
-                        .message
-                    }
+                    {errors.password.message}
                   </p>
                 )}
               </div>
@@ -329,13 +240,10 @@ function Register() {
               >
                 Create Account
               </button>
-
             </form>
 
             <div className="mt-8 text-center">
-              <p className="text-slate-600">
-                Already have an account?
-              </p>
+              <p className="text-slate-600">Already have an account?</p>
 
               <a
                 href="/login"
@@ -350,16 +258,11 @@ function Register() {
                 Sign In
               </a>
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
 
 export default Register;
-

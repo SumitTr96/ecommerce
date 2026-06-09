@@ -10,47 +10,22 @@ import {
   verifyLoginOtp,
 } from "../controllers/authController";
 
-import {
-  protect,
-} from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware";
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router.post(
-  "/register",
-  register
-);
+router.post("/register", register);
 
-router.post(
-  "/login",
-  login
-);
+router.post("/login", login);
 
-router.post(
-  "/verify-otp",
-  verifyOtp
-);
+router.post("/verify-otp", verifyOtp);
 
-router.get(
-  "/me",
-  protect,
-  getMe
-);
+router.get("/me", protect, getMe);
 
-router.post(
-  "/logout",
-  logout
-);
+router.post("/logout", logout);
 
-router.post(
-  "/send-login-otp",
-  sendLoginOtp
-);
+router.post("/send-login-otp", sendLoginOtp);
 
-router.post(
-  "/verify-login-otp",
-  verifyLoginOtp
-);
+router.post("/verify-login-otp", verifyLoginOtp);
 
 export default router;

@@ -1,6 +1,4 @@
-import {
-  useForm,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import type {
   ProductCategory,
@@ -16,31 +14,16 @@ interface Props {
     stock?: number;
   };
 
-  onSubmit: (
-    data: CreateProductRequest
-  ) => void;
+  onSubmit: (data: CreateProductRequest) => void;
 }
 
-function ProductForm({
-  defaultValues,
-  onSubmit,
-}: Props) {
-
-  const {
-    register,
-    handleSubmit,
-  } =
-    useForm<CreateProductRequest>({
-      defaultValues,
-    });
+function ProductForm({ defaultValues, onSubmit }: Props) {
+  const { register, handleSubmit } = useForm<CreateProductRequest>({
+    defaultValues,
+  });
 
   return (
-    <form
-      onSubmit={handleSubmit(
-        onSubmit
-      )}
-      className="space-y-5"
-    >
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
       <input
         {...register("name")}
         placeholder="Product Name"
@@ -55,9 +38,7 @@ function ProductForm({
       />
 
       <textarea
-        {...register(
-          "description"
-        )}
+        {...register("description")}
         placeholder="Description"
         className="
         w-full
@@ -70,8 +51,8 @@ function ProductForm({
       />
 
       <select
-  {...register("category")}
-  className="
+        {...register("category")}
+        className="
   w-full
   border
   border-slate-300
@@ -79,49 +60,29 @@ function ProductForm({
   px-4
   py-3
   "
->
-  <option value="">
-    Select Category
-  </option>
+      >
+        <option value="">Select Category</option>
 
-  <option value="electronics">
-    Electronics
-  </option>
+        <option value="electronics">Electronics</option>
 
-  <option value="fashion">
-    Fashion
-  </option>
+        <option value="fashion">Fashion</option>
 
-  <option value="books">
-    Books
-  </option>
+        <option value="books">Books</option>
 
-  <option value="home">
-    Home
-  </option>
+        <option value="home">Home</option>
 
-  <option value="gaming">
-    Gaming
-  </option>
+        <option value="gaming">Gaming</option>
 
-  <option value="mobiles">
-    Mobiles
-  </option>
+        <option value="mobiles">Mobiles</option>
 
-  <option value="accessories">
-    Accessories
-  </option>
-</select>
+        <option value="accessories">Accessories</option>
+      </select>
 
       <input
         type="number"
-        {...register(
-          "price",
-          {
-            valueAsNumber:
-              true,
-          }
-        )}
+        {...register("price", {
+          valueAsNumber: true,
+        })}
         placeholder="Price"
         className="
         w-full
@@ -135,13 +96,9 @@ function ProductForm({
 
       <input
         type="number"
-        {...register(
-          "stock",
-          {
-            valueAsNumber:
-              true,
-          }
-        )}
+        {...register("stock", {
+          valueAsNumber: true,
+        })}
         placeholder="Stock"
         className="
         w-full
@@ -153,12 +110,10 @@ function ProductForm({
         "
       />
 
-            <input
+      <input
         type="file"
         accept="image/*"
-        {...register(
-          "image"
-        )}
+        {...register("image")}
         className="
         w-full
         border
@@ -182,7 +137,6 @@ function ProductForm({
       >
         Save Product
       </button>
-
     </form>
   );
 }

@@ -1,84 +1,49 @@
+import { useEffect } from "react";
 
-import {
-  useEffect,
-} from "react";
+import { useParams } from "react-router-dom";
 
-import {
-  useParams,
-} from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../hooks/reduxHooks";
+import { fetchProductThunk } from "../features/product/productThunk";
 
-import {
-  fetchProductThunk,
-} from "../features/product/productThunk";
-
-import {
-  addToCart,
-} from "../features/cart/cartSlice";
+import { addToCart } from "../features/cart/cartSlice";
 
 function ProductDetails() {
-  const { id } =
-    useParams();
+  const { id } = useParams();
 
-  const dispatch =
-    useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const {
-    product,
-    loading,
-  } = useAppSelector(
-    (state) =>
-      state.product
-  );
+  const { product, loading } = useAppSelector((state) => state.product);
 
   useEffect(() => {
     if (id) {
-      dispatch(
-        fetchProductThunk(
-          id
-        )
-      );
+      dispatch(fetchProductThunk(id));
     }
-  }, [
-    id,
-    dispatch,
-  ]);
+  }, [id, dispatch]);
 
-  const handleAddToCart =
-    () => {
-      if (!product)
-        return;
+  const handleAddToCart = () => {
+    if (!product) return;
 
-      dispatch(
-        addToCart({
-          _id:
-            product._id,
+    dispatch(
+      addToCart({
+        _id: product._id,
 
-          name:
-            product.name,
+        name: product.name,
 
-          image:
-            product.image,
+        image: product.image,
 
-          price:
-            product.price,
+        price: product.price,
 
-          quantity: 1,
-        })
-      );
-    };
+        quantity: 1,
+      }),
+    );
+  };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="bg-white rounded-3xl shadow-lg p-10">
-          <p className="text-slate-600">
-            Loading Product...
-          </p>
+          <p className="text-slate-600">Loading Product...</p>
         </div>
       </div>
     );
@@ -88,9 +53,7 @@ function ProductDetails() {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="bg-white rounded-3xl shadow-lg p-10">
-          <p className="text-red-500">
-            Product not found.
-          </p>
+          <p className="text-red-500">Product not found.</p>
         </div>
       </div>
     );
@@ -98,9 +61,7 @@ function ProductDetails() {
 
   return (
     <div className="min-h-screen bg-slate-100 py-10 px-4">
-
       <div className="max-w-7xl mx-auto">
-
         <div
           className="
           bg-white
@@ -116,10 +77,8 @@ function ProductDetails() {
             gap-10
             "
           >
-
             {/* Product Image */}
             <div className="p-6 lg:p-10">
-
               <div
                 className="
                 bg-slate-50
@@ -128,22 +87,20 @@ function ProductDetails() {
                 "
               >
                 <img
-  src={`http://localhost:5000${product.image}`}
-  alt={product.name}
-  className="
+                  src={`http://localhost:5000${product.image}`}
+                  alt={product.name}
+                  className="
   w-full
   h-[350px]
   md:h-[500px]
   object-cover
   "
-/>
+                />
               </div>
-
             </div>
 
             {/* Product Info */}
             <div className="p-6 lg:p-10 flex flex-col justify-center">
-
               <span
                 className="
                 inline-block
@@ -157,9 +114,7 @@ function ProductDetails() {
                 mb-4
                 "
               >
-                {
-                  product.category
-                }
+                {product.category}
               </span>
 
               <h1
@@ -170,9 +125,7 @@ function ProductDetails() {
                 text-slate-800
                 "
               >
-                {
-                  product.name
-                }
+                {product.name}
               </h1>
 
               <p
@@ -182,13 +135,10 @@ function ProductDetails() {
                 leading-relaxed
                 "
               >
-                {
-                  product.description
-                }
+                {product.description}
               </p>
 
               <div className="mt-8">
-
                 <p
                   className="
                   text-4xl
@@ -196,10 +146,7 @@ function ProductDetails() {
                   text-indigo-600
                   "
                 >
-                  ₹
-                  {
-                    product.price
-                  }
+                  ₹{product.price}
                 </p>
 
                 <p
@@ -209,21 +156,13 @@ function ProductDetails() {
                   text-slate-500
                   "
                 >
-                  Stock Available:
-                  {" "}
-                  {
-                    product.stock
-                  }
+                  Stock Available: {product.stock}
                 </p>
-
               </div>
 
               <div className="mt-10">
-
                 <button
-                  onClick={
-                    handleAddToCart
-                  }
+                  onClick={handleAddToCart}
                   className="
                   w-full
                   md:w-auto
@@ -240,19 +179,13 @@ function ProductDetails() {
                 >
                   Add To Cart
                 </button>
-
               </div>
-
             </div>
-
           </div>
         </div>
-
       </div>
-
     </div>
   );
 }
 
 export default ProductDetails;
-

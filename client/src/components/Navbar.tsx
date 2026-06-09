@@ -1,75 +1,37 @@
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 
-import {
-  useAppSelector,
-  useAppDispatch,
-} from "../hooks/reduxHooks";
+import { useAppSelector, useAppDispatch } from "../hooks/reduxHooks";
 
-import {
-  logout,
-} from "../features/auth/authSlice";
-import {
-  useNavigate,
-} from "react-router-dom";
+import { logout } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
-import {
-  logoutUser,
-} from "../api/authApi";
+import { logoutUser } from "../api/authApi";
 
 function Navbar() {
+  const navigate = useNavigate();
 
-const navigate =
-  useNavigate();
+  const dispatch = useAppDispatch();
 
-  const dispatch =
-    useAppDispatch();
-
-  const cartItems =
-    useAppSelector(
-      (state) =>
-        state.cart.items
-    );
-  const totalItems =
-  cartItems.reduce(
-    (total, item) =>
-      total + item.quantity,
-    0
+  const cartItems = useAppSelector((state) => state.cart.items);
+  const totalItems = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
   );
-  const {
-    isAuthenticated,
-    user,
-  } =
-    useAppSelector(
-      (state) =>
-        state.auth
-    );
-const handleLogout =
-  async () => {
-
+  const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+  const handleLogout = async () => {
     try {
-
       await logoutUser();
-
-    } catch (
-      error
-    ) {
-
-      console.error(
-        error
-      );
-
+    } catch (error) {
+      console.error(error);
     }
 
-    dispatch(
-      logout()
-    );
+    dispatch(logout());
 
     navigate("/");
   };
   return (
     <nav className="shadow-md bg-white">
-
       <div
         className="
         container
@@ -81,7 +43,6 @@ const handleLogout =
         items-center
         "
       >
-
         <Link
           to="/"
           className="
@@ -99,36 +60,21 @@ const handleLogout =
           items-center
           "
         >
+          <Link to="/products">Products</Link>
 
-          <Link
-            to="/products"
-          >
-            Products
-          </Link>
+          {isAuthenticated && <Link to="/orders">Orders</Link>}
 
           {isAuthenticated && (
-            <Link
-              to="/orders"
-            >
-              Orders
-            </Link>
-          )}
-
-          {isAuthenticated && (
-  <Link
-    to="/cart"
-  >
-    <div
-      className="
+            <Link to="/cart">
+              <div
+                className="
       relative
       "
-    >
-      <FaShoppingCart
-        size={22}
-      />
+              >
+                <FaShoppingCart size={22} />
 
-      <span
-        className="
+                <span
+                  className="
         absolute
         -top-2
         -right-2
@@ -138,30 +84,26 @@ const handleLogout =
         px-2
         text-xs
         "
-      >
-        {totalItems}
-      </span>
-
-    </div>
-  </Link>
-)}
+                >
+                  {totalItems}
+                </span>
+              </div>
+            </Link>
+          )}
 
           {isAuthenticated ? (
             <>
-
               <span
                 className="
                 font-medium
                 "
               >
-                {
-                  user?.name
-                }
+                {user?.name}
               </span>
-                {user?.role === "admin" && (
-              <Link
-                to="/admin"
-                className="
+              {user?.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="
                 bg-indigo-600
                 text-white
                 px-4
@@ -170,13 +112,12 @@ const handleLogout =
                 hover:bg-indigo-700
                 transition
                 "
-              >
-                Admin
-              </Link>
-            )}
+                >
+                  Admin
+                </Link>
+              )}
               <button
-                onClick={handleLogout
-                }
+                onClick={handleLogout}
                 className="
                 bg-red-500
                 text-white
@@ -190,20 +131,12 @@ const handleLogout =
               >
                 Logout
               </button>
-
             </>
           ) : (
-            <Link
-              to="/login"
-            >
-              Login
-            </Link>
+            <Link to="/login">Login</Link>
           )}
-
         </div>
-
       </div>
-
     </nav>
   );
 }

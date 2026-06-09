@@ -8,45 +8,23 @@ import {
   deleteProduct,
 } from "../controllers/productController";
 
-import {
-  protect,
-} from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware";
 
-import {
-  adminOnly,
-} from "../middleware/adminMiddleware";
+import { adminOnly } from "../middleware/adminMiddleware";
 
 import upload from "../middleware/uploadMiddleware";
 
-const router =
-  express.Router();
+const router = express.Router();
 
 router
   .route("/")
   .get(getProducts)
-  .post(
-    protect,
-    adminOnly,
-    upload.single(
-    "image"
-  ),
-    createProduct
-  );
+  .post(protect, adminOnly, upload.single("image"), createProduct);
 
 router
   .route("/:id")
-  .get(
-    getProductById
-  )
-  .put(
-    protect,
-    adminOnly,
-    updateProduct
-  )
-  .delete(
-    protect,
-    adminOnly,
-    deleteProduct
-  );
+  .get(getProductById)
+  .put(protect, adminOnly, updateProduct)
+  .delete(protect, adminOnly, deleteProduct);
 
 export default router;

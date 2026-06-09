@@ -7,43 +7,18 @@ import {
   updateOrderStatus,
 } from "../controllers/adminController";
 
-import {
-  protect,
-} from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware";
 
-import {
-  adminOnly,
-} from "../middleware/adminMiddleware";
+import { adminOnly } from "../middleware/adminMiddleware";
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router.get(
-  "/users",
-  protect,
-  adminOnly,
-  getAllUsers
-);
+router.get("/users", protect, adminOnly, getAllUsers);
 
-router.delete(
-  "/users/:id",
-  protect,
-  adminOnly,
-  deleteUser
-);
+router.delete("/users/:id", protect, adminOnly, deleteUser);
 
-router.get(
-  "/orders",
-  protect,
-  adminOnly,
-  getAllOrders
-);
+router.get("/orders", protect, adminOnly, getAllOrders);
 
-router.put(
-  "/orders/:id/status",
-  protect,
-  adminOnly,
-  updateOrderStatus
-);
+router.put("/orders/:id/status", protect, adminOnly, updateOrderStatus);
 
 export default router;

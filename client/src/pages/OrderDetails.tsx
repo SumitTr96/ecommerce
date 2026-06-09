@@ -1,55 +1,29 @@
+import { useEffect } from "react";
 
-import {
-  useEffect,
-} from "react";
+import { useParams } from "react-router-dom";
 
-import {
-  useParams,
-} from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../hooks/reduxHooks";
-
-import {
-  fetchOrderThunk,
-} from "../features/order/orderThunk";
+import { fetchOrderThunk } from "../features/order/orderThunk";
 
 function OrderDetails() {
-  const { id } =
-    useParams();
+  const { id } = useParams();
 
-  const dispatch =
-    useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  const order =
-    useAppSelector(
-      (state) =>
-        state.order
-          .selectedOrder
-    );
+  const order = useAppSelector((state) => state.order.selectedOrder);
 
   useEffect(() => {
     if (id) {
-      dispatch(
-        fetchOrderThunk(
-          id
-        )
-      );
+      dispatch(fetchOrderThunk(id));
     }
-  }, [
-    id,
-    dispatch,
-  ]);
+  }, [id, dispatch]);
 
   if (!order) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
         <div className="bg-white rounded-3xl shadow-lg p-10">
-          <p className="text-slate-600 text-lg">
-            Loading Order...
-          </p>
+          <p className="text-slate-600 text-lg">Loading Order...</p>
         </div>
       </div>
     );
@@ -57,12 +31,9 @@ function OrderDetails() {
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 px-4">
-
       <div className="max-w-5xl mx-auto">
-
         {/* Header */}
         <div className="mb-8">
-
           <h1
             className="
             text-3xl
@@ -77,7 +48,6 @@ function OrderDetails() {
           <p className="mt-2 text-slate-500">
             Track and review your order information
           </p>
-
         </div>
 
         {/* Order Summary */}
@@ -90,7 +60,6 @@ function OrderDetails() {
           mb-8
           "
         >
-
           <div
             className="
             bg-gradient-to-r
@@ -101,19 +70,13 @@ function OrderDetails() {
             py-6
             "
           >
-            <h2 className="text-white text-2xl font-bold">
-              Order Summary
-            </h2>
+            <h2 className="text-white text-2xl font-bold">Order Summary</h2>
           </div>
 
           <div className="p-8">
-
             <div className="grid md:grid-cols-3 gap-6">
-
               <div>
-                <p className="text-sm text-slate-500">
-                  Order ID
-                </p>
+                <p className="text-sm text-slate-500">Order ID</p>
 
                 <p className="font-semibold text-slate-800 break-all">
                   {order._id}
@@ -121,9 +84,7 @@ function OrderDetails() {
               </div>
 
               <div>
-                <p className="text-sm text-slate-500">
-                  Total Amount
-                </p>
+                <p className="text-sm text-slate-500">Total Amount</p>
 
                 <p className="font-bold text-2xl text-indigo-600">
                   ₹{order.totalAmount}
@@ -131,9 +92,7 @@ function OrderDetails() {
               </div>
 
               <div>
-                <p className="text-sm text-slate-500">
-                  Status
-                </p>
+                <p className="text-sm text-slate-500">Status</p>
 
                 <span
                   className="
@@ -150,11 +109,8 @@ function OrderDetails() {
                   {order.status}
                 </span>
               </div>
-
             </div>
-
           </div>
-
         </div>
 
         {/* Order Items */}
@@ -167,7 +123,6 @@ function OrderDetails() {
           p-8
           "
         >
-
           <h2
             className="
             text-2xl
@@ -180,15 +135,10 @@ function OrderDetails() {
           </h2>
 
           <div className="space-y-4">
-
-            {order.items?.map(
-              (
-                item,
-                index
-              ) => (
-                <div
-                  key={index}
-                  className="
+            {order.items?.map((item, index) => (
+              <div
+                key={index}
+                className="
                   flex
                   flex-col
                   sm:flex-row
@@ -199,39 +149,25 @@ function OrderDetails() {
                   border-slate-200
                   pb-4
                   "
-                >
+              >
+                <div>
+                  <h3 className="font-medium text-slate-800">{item.name}</h3>
 
-                  <div>
-                    <h3 className="font-medium text-slate-800">
-                      {item.name}
-                    </h3>
-
-                    <p className="text-sm text-slate-500">
-                      Quantity:
-                      {" "}
-                      {item.quantity}
-                    </p>
-                  </div>
-
-                  <div className="font-semibold text-slate-800">
-                    ₹
-                    {item.price *
-                      item.quantity}
-                  </div>
-
+                  <p className="text-sm text-slate-500">
+                    Quantity: {item.quantity}
+                  </p>
                 </div>
-              )
-            )}
 
+                <div className="font-semibold text-slate-800">
+                  ₹{item.price * item.quantity}
+                </div>
+              </div>
+            ))}
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
 
 export default OrderDetails;
-

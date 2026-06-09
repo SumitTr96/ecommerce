@@ -1,14 +1,9 @@
 interface Props {
   value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function SearchBar({
-  value,
-  onChange,
-}: Props) {
+function SearchBar({ value, onChange }: Props) {
   return (
     <input
       type="text"

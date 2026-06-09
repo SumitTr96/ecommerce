@@ -6,28 +6,12 @@ import {
   getOrderById,
 } from "../controllers/orderController";
 
-import {
-  protect,
-} from "../middleware/authMiddleware";
+import { protect } from "../middleware/authMiddleware";
 
-const router =
-  express.Router();
+const router = express.Router();
 
-router
-  .route("/")
-  .post(
-    protect,
-    createOrder
-  )
-  .get(
-    protect,
-    getOrders
-  );
+router.route("/").post(protect, createOrder).get(protect, getOrders);
 
-router.get(
-  "/:id",
-  protect,
-  getOrderById
-);
+router.get("/:id", protect, getOrderById);
 
 export default router;

@@ -1,51 +1,25 @@
 import api from "./axios";
 
-export const getAllUsers =
-  async () => {
+export const getAllUsers = async () => {
+  const response = await api.get("/admin/users");
 
-    const response =
-      await api.get(
-        "/admin/users"
-      );
+  return response.data;
+};
 
-    return response.data;
-  };
+export const deleteUser = async (id: string) => {
+  const response = await api.delete(`/admin/users/${id}`);
 
-export const deleteUser =
-  async (
-    id: string
-  ) => {
+  return response.data;
+};
 
-    const response =
-      await api.delete(
-        `/admin/users/${id}`
-      );
+export const getAllOrders = async () => {
+  const response = await api.get("/admin/orders");
 
-    return response.data;
-  };
+  return response.data;
+};
 
-export const getAllOrders =
-  async () => {
+export const updateOrderStatus = async (id: string, status: string) => {
+  const response = await api.put(`/admin/orders/${id}/status`, { status });
 
-    const response =
-      await api.get(
-        "/admin/orders"
-      );
-
-    return response.data;
-  };
-
-export const updateOrderStatus =
-  async (
-    id: string,
-    status: string
-  ) => {
-
-    const response =
-      await api.put(
-        `/admin/orders/${id}/status`,
-        { status }
-      );
-
-    return response.data;
-  };
+  return response.data;
+};

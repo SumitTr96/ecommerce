@@ -1,44 +1,23 @@
 import api from "./axios";
 
-import type {
-  Order,
-  CreateOrderRequest,
-} from "../types/order";
+import type { Order, CreateOrderRequest } from "../types/order";
 
-export const createOrder =
-  async (
-    orderData: CreateOrderRequest
-  ): Promise<Order> => {
+export const createOrder = async (
+  orderData: CreateOrderRequest,
+): Promise<Order> => {
+  const response = await api.post("/orders", orderData);
 
-    const response =
-      await api.post(
-        "/orders",
-        orderData
-      );
+  return response.data;
+};
 
-    return response.data;
-  };
+export const getOrders = async (): Promise<Order[]> => {
+  const response = await api.get("/orders");
 
-export const getOrders =
-  async (): Promise<Order[]> => {
+  return response.data;
+};
 
-    const response =
-      await api.get(
-        "/orders"
-      );
+export const getOrder = async (id: string): Promise<Order> => {
+  const response = await api.get(`/orders/${id}`);
 
-    return response.data;
-  };
-
-export const getOrder =
-  async (
-    id: string
-  ): Promise<Order> => {
-
-    const response =
-      await api.get(
-        `/orders/${id}`
-      );
-
-    return response.data;
-  };
+  return response.data;
+};

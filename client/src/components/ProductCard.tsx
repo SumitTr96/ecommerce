@@ -10,32 +10,24 @@ interface Props {
   product: Product;
 }
 
-function ProductCard({
-  product,
-}: Props) {
-  const dispatch =
-    useAppDispatch();
+function ProductCard({ product }: Props) {
+  const dispatch = useAppDispatch();
 
-  const handleAddToCart =
-    () => {
-      dispatch(
-        addToCart({
-          _id:
-            product._id,
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        _id: product._id,
 
-          name:
-            product.name,
+        name: product.name,
 
-          image:
-            product.image,
+        image: product.image,
 
-          price:
-            product.price,
+        price: product.price,
 
-          quantity: 1,
-        })
-      );
-    };
+        quantity: 1,
+      }),
+    );
+  };
 
   return (
     <div
@@ -48,18 +40,17 @@ function ProductCard({
       hover:shadow-lg
       "
     >
-          <img
-      src={`http://localhost:5000${product.image}`}
-      alt={product.name}
-      className="
+      <img
+        src={`http://localhost:5000${product.image}`}
+        alt={product.name}
+        className="
       h-56
       w-full
       object-cover
       "
-    />
+      />
 
       <div className="p-4">
-
         <p
           className="
           text-sm
@@ -106,7 +97,6 @@ function ProductCard({
           mt-4
           "
         >
-
           <Link
             to={`/products/${product._id}`}
             className="
@@ -121,9 +111,7 @@ function ProductCard({
           </Link>
 
           <button
-            onClick={
-              handleAddToCart
-            }
+            onClick={handleAddToCart}
             className="
             flex-1
             bg-black
@@ -134,11 +122,8 @@ function ProductCard({
           >
             Add To Cart
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 }

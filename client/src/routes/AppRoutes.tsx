@@ -26,76 +26,58 @@ function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
-
       <Route path="/" element={<Home />} />
-
+      <Route path="/products" element={<Products />} />
+      <Route path="/products/:id" element={<ProductDetails />} />
       <Route
-        path="/products"
-        element={<Products />}
+        path="/login-otp"
+        element={
+          <PublicRoute>
+            <LoginOtp />
+          </PublicRoute>
+        }
       />
-
       <Route
-        path="/products/:id"
-        element={<ProductDetails />}
+        path="/login"
+        element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        }
       />
-
-<Route
-  path="/login-otp"
-  element={
-    <PublicRoute>
-      <LoginOtp />
-    </PublicRoute>
-  }
-/>
-
       <Route
-  path="/login"
-  element={
-    <PublicRoute>
-      <Login />
-    </PublicRoute>
-  }
-/>
-
-<Route
-  path="/register"
-  element={
-    <PublicRoute>
-      <Register />
-    </PublicRoute>
-  }
-/>
-
-<Route
-  path="/verify-otp"
-  element={
-    <PublicRoute>
-      <VerifyOtp />
-    </PublicRoute>
-  }
-/>
-{/* Protected Routes */}
-
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
       <Route
- path="/checkout"
- element={
-  <ProtectedRoute>
-   <Checkout/>
-  </ProtectedRoute>
- }
-/>
-
-
-<Route
- path="/orders/:id"
- element={
-  <ProtectedRoute>
-   <OrderDetails/>
-  </ProtectedRoute>
- }
-/>
-
-
+        path="/verify-otp"
+        element={
+          <PublicRoute>
+            <VerifyOtp />
+          </PublicRoute>
+        }
+      />
+      {/* Protected Routes */}
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders/:id"
+        element={
+          <ProtectedRoute>
+            <OrderDetails />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/cart"
         element={
@@ -104,7 +86,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/orders"
         element={
@@ -113,65 +94,56 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-    // Admin routes
-
-    <Route
-  path="/admin"
-  element={
-    <AdminRoute>
-      <Dashboard />
-    </AdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/products"
-  element={
-    <AdminRoute>
-      <AdminProducts />
-    </AdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/products/create"
-  element={
-    <AdminRoute>
-      <CreateProduct />
-    </AdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/products/:id/edit"
-  element={
-    <AdminRoute>
-      <EditProduct />
-    </AdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/orders"
-  element={
-    <AdminRoute>
-      <AdminOrders />
-    </AdminRoute>
-  }
-/>
-
-<Route
-  path="/admin/users"
-  element={
-    <AdminRoute>
-      <AdminUsers />
-    </AdminRoute>
-  }
-/>
+      // Admin routes
+      <Route
+        path="/admin"
+        element={
+          <AdminRoute>
+            <Dashboard />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products"
+        element={
+          <AdminRoute>
+            <AdminProducts />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products/create"
+        element={
+          <AdminRoute>
+            <CreateProduct />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/products/:id/edit"
+        element={
+          <AdminRoute>
+            <EditProduct />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/orders"
+        element={
+          <AdminRoute>
+            <AdminOrders />
+          </AdminRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <AdminRoute>
+            <AdminUsers />
+          </AdminRoute>
+        }
+      />
     </Routes>
-
-
-    
   );
 }
 

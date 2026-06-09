@@ -1,13 +1,8 @@
-import {
-  createSlice,
-} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import type { Product } from "../../types/product";
 
-import {
-  fetchProductsThunk,
-  fetchProductThunk,
-} from "./productThunk";
+import { fetchProductsThunk, fetchProductThunk } from "./productThunk";
 
 interface ProductState {
   products: Product[];
@@ -29,71 +24,36 @@ const initialState: ProductState = {
   error: null,
 };
 
-const productSlice =
-  createSlice({
-    name: "product",
+const productSlice = createSlice({
+  name: "product",
 
-    initialState,
+  initialState,
 
-    reducers: {},
+  reducers: {},
 
-    extraReducers:
-      (builder) => {
+  extraReducers: (builder) => {
+    builder
 
-        builder
+      .addCase(fetchProductsThunk.pending, (state) => {
+        state.loading = true;
+      })
 
-          .addCase(
-            fetchProductsThunk.pending,
-            (
-              state
-            ) => {
-              state.loading =
-                true;
-            }
-          )
+      .addCase(fetchProductsThunk.fulfilled, (state, action) => {
+        state.loading = false;
 
-          .addCase(
-            fetchProductsThunk.fulfilled,
-            (
-              state,
-              action
-            ) => {
+        state.products = action.payload;
+      })
 
-              state.loading =
-                false;
+      .addCase(fetchProductsThunk.rejected, (state) => {
+        state.loading = false;
 
-              state.products =
-                action.payload;
-            }
-          )
+        state.error = "Failed to fetch products";
+      })
 
-          .addCase(
-            fetchProductsThunk.rejected,
-            (
-              state
-            ) => {
+      .addCase(fetchProductThunk.fulfilled, (state, action) => {
+        state.product = action.payload;
+      });
+  },
+});
 
-              state.loading =
-                false;
-
-              state.error =
-                "Failed to fetch products";
-            }
-          )
-
-          .addCase(
-            fetchProductThunk.fulfilled,
-            (
-              state,
-              action
-            ) => {
-
-              state.product =
-                action.payload;
-            }
-          );
-      },
-  });
-
-export default
-productSlice.reducer;
+export default productSlice.reducer;

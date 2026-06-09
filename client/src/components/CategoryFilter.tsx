@@ -3,16 +3,10 @@ interface Props {
 
   categories: string[];
 
-  onChange: (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-function CategoryFilter({
-  category,
-  categories,
-  onChange,
-}: Props) {
+function CategoryFilter({ category, categories, onChange }: Props) {
   return (
     <select
       value={category}
@@ -26,20 +20,13 @@ function CategoryFilter({
       py-3
       "
     >
-      <option value="">
-        All Categories
-      </option>
+      <option value="">All Categories</option>
 
-      {categories.map(
-        (category) => (
-          <option
-            key={category}
-            value={category}
-          >
-            {category}
-          </option>
-        )
-      )}
+      {categories.map((category) => (
+        <option key={category} value={category}>
+          {category}
+        </option>
+      ))}
     </select>
   );
 }

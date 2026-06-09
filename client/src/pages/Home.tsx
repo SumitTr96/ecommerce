@@ -1,18 +1,10 @@
-
 import { Link } from "react-router-dom";
-import {
-  useAppSelector,
-} from "../hooks/reduxHooks";
+import { useAppSelector } from "../hooks/reduxHooks";
 
 function Home() {
-  const isAuthenticated =
-  useAppSelector(
-    (state) =>
-      state.auth.isAuthenticated
-  );
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   return (
     <div className="bg-slate-100">
-
       {/* Hero Section */}
       <section
         className="
@@ -24,12 +16,9 @@ function Home() {
         "
       >
         <div className="max-w-7xl mx-auto">
-
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-
             {/* Left Content */}
             <div>
-
               <span
                 className="
                 inline-block
@@ -79,10 +68,8 @@ function Home() {
                 max-w-xl
                 "
               >
-                Discover premium products,
-                unbeatable prices, and a
-                seamless shopping experience
-                all in one place.
+                Discover premium products, unbeatable prices, and a seamless
+                shopping experience all in one place.
               </p>
 
               <div
@@ -94,10 +81,9 @@ function Home() {
                 mt-8
                 "
               >
-             
-    <Link
-      to="/products"
-      className="
+                <Link
+                  to="/products"
+                  className="
       bg-indigo-600
       px-6
       py-3
@@ -108,40 +94,33 @@ function Home() {
                   hover:bg-indigo-700
                   hover:shadow-lg
       "
-    >
-      Shop Now
-    </Link>
-       
-  
-    {
-  !isAuthenticated && (
-    <Link
-      to="/register"
-      className="
-      bg-indigo-600
-      px-6
-      py-3
-      rounded-xl
-      text-white
-      font-semibold
-      transition
-                  hover:bg-indigo-700
-                  hover:shadow-lg
-      "
-    >
-      Create Account
-    </Link>
-  )
-}
-  
+                >
+                  Shop Now
+                </Link>
 
+                {!isAuthenticated && (
+                  <Link
+                    to="/register"
+                    className="
+      bg-indigo-600
+      px-6
+      py-3
+      rounded-xl
+      text-white
+      font-semibold
+      transition
+                  hover:bg-indigo-700
+                  hover:shadow-lg
+      "
+                  >
+                    Create Account
+                  </Link>
+                )}
               </div>
-
             </div>
 
             {/* Right Content */}
             <div>
-
               <div
                 className="
                 bg-white
@@ -163,25 +142,18 @@ function Home() {
                   justify-center
                   "
                 >
-                  <span className="text-8xl">
-                    🛍️
-                  </span>
+                  <span className="text-8xl">🛍️</span>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </div>
       </section>
 
       {/* Features Section */}
 
       <section className="py-20 px-4">
-
         <div className="max-w-7xl mx-auto">
-
           <h2
             className="
             text-3xl
@@ -201,7 +173,6 @@ function Home() {
             gap-8
             "
           >
-
             <div
               className="
               bg-white
@@ -211,9 +182,7 @@ function Home() {
               text-center
               "
             >
-              <div className="text-5xl mb-4">
-                🚚
-              </div>
+              <div className="text-5xl mb-4">🚚</div>
 
               <h3
                 className="
@@ -226,8 +195,7 @@ function Home() {
               </h3>
 
               <p className="text-slate-500">
-                Fast and reliable shipping
-                directly to your doorstep.
+                Fast and reliable shipping directly to your doorstep.
               </p>
             </div>
 
@@ -240,9 +208,7 @@ function Home() {
               text-center
               "
             >
-              <div className="text-5xl mb-4">
-                🔒
-              </div>
+              <div className="text-5xl mb-4">🔒</div>
 
               <h3
                 className="
@@ -255,8 +221,7 @@ function Home() {
               </h3>
 
               <p className="text-slate-500">
-                Shop confidently with
-                protected transactions.
+                Shop confidently with protected transactions.
               </p>
             </div>
 
@@ -269,9 +234,7 @@ function Home() {
               text-center
               "
             >
-              <div className="text-5xl mb-4">
-                ⭐
-              </div>
+              <div className="text-5xl mb-4">⭐</div>
 
               <h3
                 className="
@@ -284,20 +247,14 @@ function Home() {
               </h3>
 
               <p className="text-slate-500">
-                Carefully selected products
-                with guaranteed quality.
+                Carefully selected products with guaranteed quality.
               </p>
             </div>
-
           </div>
-
         </div>
-
       </section>
-
     </div>
   );
 }
 
 export default Home;
-

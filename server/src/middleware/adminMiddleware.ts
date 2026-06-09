@@ -1,28 +1,11 @@
-import type{
-  Request,
-  Response,
-  NextFunction,
-} from "express";
+import type { Request, Response, NextFunction } from "express";
 
-export const adminOnly =
-  (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+export const adminOnly = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.role !== "admin") {
+    return res.status(403).json({
+      message: "Admin only",
+    });
+  }
 
-    if (
-      req.user?.role !==
-      "admin"
-    ) {
-
-      return res
-        .status(403)
-        .json({
-          message:
-            "Admin only",
-        });
-    }
-
-    next();
-  };
+  next();
+};

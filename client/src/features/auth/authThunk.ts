@@ -3,129 +3,62 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { syncCart } from "../../api/cartApi";
 
 import {
-registerUser,
-getProfile,
-sendLoginOtp,
-verifyLoginOtp,
+  registerUser,
+  getProfile,
+  sendLoginOtp,
+  verifyLoginOtp,
 } from "../../api/authApi";
 
-import type {
-RegisterFormData,
-} from "../../utils/registerSchema";
+import type { RegisterFormData } from "../../utils/registerSchema";
 
-export const registerThunk =
-createAsyncThunk(
-"auth/register",
+export const registerThunk = createAsyncThunk(
+  "auth/register",
 
-
-async (
-  data: RegisterFormData
-) => {
-
-  return await registerUser(
-    data
-  );
-
-}
-
-
+  async (data: RegisterFormData) => {
+    return await registerUser(data);
+  },
 );
 
-export const loginThunk =
-createAsyncThunk(
-"auth/send-login-otp",
+export const loginThunk = createAsyncThunk(
+  "auth/send-login-otp",
 
+  async (credentials: { email: string; password: string }) => {
+    await sendLoginOtp(credentials);
 
-async (
-  credentials: {
-    email: string;
-    password: string;
-  }
-) => {
-
-  await sendLoginOtp(
-    credentials
-  );
-
-  return {
-    email:
-      credentials.email,
-  };
-
-}
-
+    return {
+      email: credentials.email,
+    };
+  },
 );
 
-export const verifyLoginOtpThunk =
-createAsyncThunk(
-"auth/verify-login-otp",
+export const verifyLoginOtpThunk = createAsyncThunk(
+  "auth/verify-login-otp",
 
-async (
-  data: {
-    email: string;
-    otp: string;
-  }
-) => {
+  async (data: { email: string; otp: string }) => {
+    const response = await verifyLoginOtp(data.email, data.otp);
 
-  const response =
-    await verifyLoginOtp(
-      data.email,
-      data.otp
-    );
+    const guestCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-  const guestCart =
-    JSON.parse(
-      localStorage.getItem(
-        "cart"
-      ) || "[]"
-    );
+    if (guestCart.length > 0) {
+      await syncCart({
+        items: guestCart.map((item: { _id: string; quantity: number }) => ({
+          product: item._id,
 
-  if (
-    guestCart.length > 0
-  ) {
+          quantity: item.quantity,
+        })),
+      });
 
-    await syncCart({
-      items:
-        guestCart.map(
-          (
-            item: {
-              _id: string;
-              quantity: number;
-            }
-          ) => ({
-            product:
-              item._id,
+      localStorage.removeItem("cart");
+    }
 
-            quantity:
-              item.quantity,
-          })
-        ),
-    });
-
-    localStorage.removeItem(
-      "cart"
-    );
-
-  }
-
-  return response;
-
-}
-
-
+    return response;
+  },
 );
 
-export const getProfileThunk =
-createAsyncThunk(
-"auth/profile",
+export const getProfileThunk = createAsyncThunk(
+  "auth/profile",
 
-
-async () => {
-
-  return await getProfile();
-
-}
-
-
+  async () => {
+    return await getProfile();
+  },
 );
-

@@ -1,6 +1,4 @@
-import {
-  useAppDispatch,
-} from "../hooks/reduxHooks";
+import { useAppDispatch } from "../hooks/reduxHooks";
 
 import {
   increaseQuantity,
@@ -8,17 +6,14 @@ import {
   removeFromCart,
 } from "../features/cart/cartSlice";
 
-import type{ CartItem as CartItemType } from "../types/cart";
+import type { CartItem as CartItemType } from "../types/cart";
 
 interface Props {
   item: CartItemType;
 }
 
-function CartItem({
-  item,
-}: Props) {
-  const dispatch =
-    useAppDispatch();
+function CartItem({ item }: Props) {
+  const dispatch = useAppDispatch();
   return (
     <div
       className="
@@ -30,13 +25,9 @@ function CartItem({
       "
     >
       <div>
-        <h3>
-          {item.name}
-        </h3>
+        <h3>{item.name}</h3>
 
-        <p>
-          ₹{item.price}
-        </p>
+        <p>₹{item.price}</p>
       </div>
 
       <div
@@ -45,48 +36,14 @@ function CartItem({
         gap-2
         "
       >
-        <button
-          onClick={() =>
-            dispatch(
-              decreaseQuantity(
-                item._id
-              )
-            )
-          }
-        >
-          -
-        </button>
+        <button onClick={() => dispatch(decreaseQuantity(item._id))}>-</button>
 
-        <span>
-          {
-            item.quantity
-          }
-        </span>
+        <span>{item.quantity}</span>
 
-        <button
-          onClick={() =>
-            dispatch(
-              increaseQuantity(
-                item._id
-              )
-            )
-          }
-        >
-          +
-        </button>
+        <button onClick={() => dispatch(increaseQuantity(item._id))}>+</button>
       </div>
 
-      <button
-        onClick={() =>
-          dispatch(
-            removeFromCart(
-              item._id
-            )
-          )
-        }
-      >
-        Remove
-      </button>
+      <button onClick={() => dispatch(removeFromCart(item._id))}>Remove</button>
     </div>
   );
 }

@@ -1,30 +1,18 @@
-import {
-  useEffect,
-} from "react";
+import { useEffect } from "react";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AppRoutes from "./routes/AppRoutes";
 
-import {
-  useAppDispatch,
-} from "./hooks/reduxHooks";
+import { useAppDispatch } from "./hooks/reduxHooks";
 
-import {
-  getProfileThunk,
-} from "./features/auth/authThunk";
+import { getProfileThunk } from "./features/auth/authThunk";
 
 function App() {
-
-  const dispatch =
-    useAppDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-
-    dispatch(
-      getProfileThunk()
-    );
-
+    dispatch(getProfileThunk());
   }, [dispatch]);
 
   return (
@@ -35,17 +23,13 @@ function App() {
       flex-col
       "
     >
-
       <Navbar />
 
       <main className="flex-1">
-
         <AppRoutes />
-
       </main>
 
       <Footer />
-
     </div>
   );
 }
