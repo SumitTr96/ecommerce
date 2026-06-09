@@ -105,6 +105,9 @@ function ProductCard({ product }: Props) {
             bg-gray-200
             py-2
             rounded
+            transition
+            hover:bg-gray-400
+            hover:shadow-lg
             "
           >
             View
@@ -113,11 +116,15 @@ function ProductCard({ product }: Props) {
           <button
             onClick={handleAddToCart}
             className="
-            flex-1
-            bg-black
-            text-white
-            py-2
-            rounded
+             bg-indigo-600
+              px-6
+              py-3
+              rounded-xl
+             text-white
+              font-semibold
+              transition
+             hover:bg-indigo-700
+              hover:shadow-lg
             "
           >
             Add To Cart

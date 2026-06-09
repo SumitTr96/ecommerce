@@ -64,32 +64,30 @@ function Navbar() {
 
           {isAuthenticated && <Link to="/orders">Orders</Link>}
 
-          {isAuthenticated && (
-            <Link to="/cart">
-              <div
+          <Link to={isAuthenticated ? "/cart" : "/login?redirect=/cart"}>
+            <div
+              className="
+    relative
+    "
+            >
+              <FaShoppingCart size={22} />
+
+              <span
                 className="
-      relative
+      absolute
+      -top-2
+      -right-2
+      bg-red-500
+      text-white
+      rounded-full
+      px-2
+      text-xs
       "
               >
-                <FaShoppingCart size={22} />
-
-                <span
-                  className="
-        absolute
-        -top-2
-        -right-2
-        bg-red-500
-        text-white
-        rounded-full
-        px-2
-        text-xs
-        "
-                >
-                  {totalItems}
-                </span>
-              </div>
-            </Link>
-          )}
+                {totalItems}
+              </span>
+            </div>
+          </Link>
 
           {isAuthenticated ? (
             <>
