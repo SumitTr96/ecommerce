@@ -54,15 +54,19 @@ function AdminDashboard() {
               Manage products
             </p>
           </Link>
+          <Link
+  to="/admin/orders"
+  className="
+  bg-white
+  rounded-3xl
+  shadow-lg
+  p-8
+  hover:shadow-xl
+  transition
+  "
+>
 
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            shadow-lg
-            p-8
-            "
-          >
+          
             <div className="text-5xl mb-4">
               🛒
             </div>
@@ -74,16 +78,21 @@ function AdminDashboard() {
             <p className="text-slate-500 mt-2">
               View order statistics
             </p>
-          </div>
+          
+            </Link>
+<Link
+  to="/admin/users"
+  className="
+  bg-white
+  rounded-3xl
+  shadow-lg
+  p-8
+  hover:shadow-xl
+  transition
+  "
+>
 
-          <div
-            className="
-            bg-white
-            rounded-3xl
-            shadow-lg
-            p-8
-            "
-          >
+          
             <div className="text-5xl mb-4">
               👥
             </div>
@@ -95,7 +104,8 @@ function AdminDashboard() {
             <p className="text-slate-500 mt-2">
               User management
             </p>
-          </div>
+          
+            </Link>
 
         </div>
 

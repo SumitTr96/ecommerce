@@ -2,8 +2,11 @@
 import CartItem from "../components/CartItem";
 import CartSummary from "../components/CartSummary";
 import { useAppSelector } from "../hooks/reduxHooks";
+import { useNavigate } from "react-router-dom";
+
 
 function Cart() {
+  const navigate = useNavigate();
   const items = useAppSelector(
     (state) => state.cart.items
   );
@@ -71,6 +74,9 @@ function Cart() {
                   </p>
 
                   <button
+                  onClick={() =>
+    navigate("/products")
+  }
                     className="
                     mt-6
                     bg-indigo-600

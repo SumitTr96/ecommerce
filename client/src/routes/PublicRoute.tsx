@@ -10,12 +10,12 @@ interface Props {
   children: React.ReactNode;
 }
 
-function AdminRoute({
+function PublicRoute({
   children,
 }: Props) {
 
   const {
-    user,
+    isAuthenticated,
     loading,
   } =
     useAppSelector(
@@ -26,34 +26,15 @@ function AdminRoute({
   if (loading) {
 
     return (
-      <div
-        className="
-        min-h-screen
-        flex
-        items-center
-        justify-center
-        "
-      >
+      <div>
         Loading...
       </div>
     );
 
   }
 
-  if (!user) {
-
-    return (
-      <Navigate
-        to="/login"
-        replace
-      />
-    );
-
-  }
-
   if (
-    user.role !==
-    "admin"
+    isAuthenticated
   ) {
 
     return (
@@ -68,4 +49,4 @@ function AdminRoute({
   return children;
 }
 
-export default AdminRoute;
+export default PublicRoute;

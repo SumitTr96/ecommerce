@@ -41,6 +41,10 @@ function CartSummary({
         py-2
         rounded
         cursor-pointer
+        transition
+  hover:bg-indigo-800
+  hover:scale-105
+  active:scale-95
         "
       >
         Checkout

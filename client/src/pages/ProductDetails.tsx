@@ -128,19 +128,15 @@ function ProductDetails() {
                 "
               >
                 <img
-                  src={
-                    product.image
-                  }
-                  alt={
-                    product.name
-                  }
-                  className="
-                  w-full
-                  h-[350px]
-                  md:h-[500px]
-                  object-cover
-                  "
-                />
+  src={`http://localhost:5000${product.image}`}
+  alt={product.name}
+  className="
+  w-full
+  h-[350px]
+  md:h-[500px]
+  object-cover
+  "
+/>
               </div>
 
             </div>

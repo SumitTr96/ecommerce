@@ -3,92 +3,129 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { syncCart } from "../../api/cartApi";
 
 import {
-  loginUser,
-  registerUser,
-} from "../../api/authApi";
-
-import {
-  getProfile,
+registerUser,
+getProfile,
+sendLoginOtp,
+verifyLoginOtp,
 } from "../../api/authApi";
 
 import type {
-  RegisterFormData,
+RegisterFormData,
 } from "../../utils/registerSchema";
 
 export const registerThunk =
-  createAsyncThunk(
-    "auth/register",
+createAsyncThunk(
+"auth/register",
 
-    async (
-      data: RegisterFormData
-    ) => {
-      return await registerUser(
-        data
-      );
-    }
+
+async (
+  data: RegisterFormData
+) => {
+
+  return await registerUser(
+    data
   );
+
+}
+
+
+);
 
 export const loginThunk =
-  createAsyncThunk(
-    "auth/login",
+createAsyncThunk(
+"auth/send-login-otp",
 
-    async (
-      credentials: {
-        email: string;
-        password: string;
-      }
-    ) => {
 
-      const loginResponse =
-        await loginUser(
-          credentials
-        );
+async (
+  credentials: {
+    email: string;
+    password: string;
+  }
+) => {
 
-      const guestCart =
-        JSON.parse(
-          localStorage.getItem(
-            "cart"
-          ) || "[]"
-        );
-
-      if (
-        guestCart.length > 0
-      ) {
-
-        await syncCart({
-          items:
-            guestCart.map(
-              (
-                item: {
-                  _id: string;
-                  quantity: number;
-                }
-              ) => ({
-                product:
-                  item._id,
-
-                quantity:
-                  item.quantity,
-              })
-            ),
-        });
-
-        localStorage.removeItem(
-          "cart"
-        );
-      }
-
-      return loginResponse;
-    }
+  await sendLoginOtp(
+    credentials
   );
 
-  export const getProfileThunk =
-  createAsyncThunk(
-    "auth/profile",
+  return {
+    email:
+      credentials.email,
+  };
 
-    async () => {
+}
 
-      return await getProfile();
+);
 
-    }
-  );
+export const verifyLoginOtpThunk =
+createAsyncThunk(
+"auth/verify-login-otp",
+
+async (
+  data: {
+    email: string;
+    otp: string;
+  }
+) => {
+
+  const response =
+    await verifyLoginOtp(
+      data.email,
+      data.otp
+    );
+
+  const guestCart =
+    JSON.parse(
+      localStorage.getItem(
+        "cart"
+      ) || "[]"
+    );
+
+  if (
+    guestCart.length > 0
+  ) {
+
+    await syncCart({
+      items:
+        guestCart.map(
+          (
+            item: {
+              _id: string;
+              quantity: number;
+            }
+          ) => ({
+            product:
+              item._id,
+
+            quantity:
+              item.quantity,
+          })
+        ),
+    });
+
+    localStorage.removeItem(
+      "cart"
+    );
+
+  }
+
+  return response;
+
+}
+
+
+);
+
+export const getProfileThunk =
+createAsyncThunk(
+"auth/profile",
+
+
+async () => {
+
+  return await getProfile();
+
+}
+
+
+);
+

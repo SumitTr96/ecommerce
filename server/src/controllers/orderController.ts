@@ -31,62 +31,83 @@ export const createOrder =
       totalAmount,
     } = req.body;
 
-    const order =
-  await Order.create({
-    user:
-      req.user._id,
-
-    items,
-
-    totalAmount,
-  });
-
-for (
-  const item of items
-) {
-
-  const product =
-    await Product.findById(
-      item.product
-    );
-
-  if (
-    product
-  ) {
-
-    if (
-      product.stock <
-      item.quantity
+    for (
+      const item of items
     ) {
 
-      return res
-        .status(400)
-        .json({
-          message:
-            `${product.name} is out of stock`,
-        });
+      const product =
+        await Product.findById(
+          item.product
+        );
+
+      if (!product) {
+
+        return res
+          .status(404)
+          .json({
+            message:
+              "Product not found",
+          });
+
+      }
+
+      if (
+        product.stock <
+        item.quantity
+      ) {
+
+        return res
+          .status(400)
+          .json({
+            message:
+              `${product.name} is out of stock`,
+          });
+
+      }
 
     }
 
-    product.stock -=
-      item.quantity;
+    const order =
+      await Order.create({
+        user:
+          req.user._id,
 
-    await product.save();
+        items,
 
-  }
+        totalAmount,
+      });
 
-}
+    for (
+      const item of items
+    ) {
 
-await Cart.findOneAndUpdate(
-  {
-    user:
-      req.user._id,
-  },
+      const product =
+        await Product.findById(
+          item.product
+        );
 
-  {
-    items: [],
-  }
-);
+      if (product) {
+
+        product.stock -=
+          item.quantity;
+
+        await product.save();
+
+      }
+
+    }
+
+    await Cart.findOneAndUpdate(
+      {
+        user:
+          req.user._id,
+      },
+
+      {
+        items: [],
+      }
+    );
+
     res
       .status(201)
       .json(order);

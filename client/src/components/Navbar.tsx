@@ -9,8 +9,18 @@ import {
 import {
   logout,
 } from "../features/auth/authSlice";
+import {
+  useNavigate,
+} from "react-router-dom";
+
+import {
+  logoutUser,
+} from "../api/authApi";
 
 function Navbar() {
+
+const navigate =
+  useNavigate();
 
   const dispatch =
     useAppDispatch();
@@ -20,7 +30,12 @@ function Navbar() {
       (state) =>
         state.cart.items
     );
-
+  const totalItems =
+  cartItems.reduce(
+    (total, item) =>
+      total + item.quantity,
+    0
+  );
   const {
     isAuthenticated,
     user,
@@ -29,7 +44,29 @@ function Navbar() {
       (state) =>
         state.auth
     );
+const handleLogout =
+  async () => {
 
+    try {
+
+      await logoutUser();
+
+    } catch (
+      error
+    ) {
+
+      console.error(
+        error
+      );
+
+    }
+
+    dispatch(
+      logout()
+    );
+
+    navigate("/");
+  };
   return (
     <nav className="shadow-md bg-white">
 
@@ -77,40 +114,37 @@ function Navbar() {
             </Link>
           )}
 
-          <Link
-            to="/cart"
-          >
+          {isAuthenticated && (
+  <Link
+    to="/cart"
+  >
+    <div
+      className="
+      relative
+      "
+    >
+      <FaShoppingCart
+        size={22}
+      />
 
-            <div
-              className="
-              relative
-              "
-            >
+      <span
+        className="
+        absolute
+        -top-2
+        -right-2
+        bg-red-500
+        text-white
+        rounded-full
+        px-2
+        text-xs
+        "
+      >
+        {totalItems}
+      </span>
 
-              <FaShoppingCart
-                size={22}
-              />
-
-              <span
-                className="
-                absolute
-                -top-2
-                -right-2
-                bg-red-500
-                text-white
-                rounded-full
-                px-2
-                text-xs
-                "
-              >
-                {
-                  cartItems.length
-                }
-              </span>
-
-            </div>
-
-          </Link>
+    </div>
+  </Link>
+)}
 
           {isAuthenticated ? (
             <>
@@ -126,7 +160,7 @@ function Navbar() {
               </span>
                 {user?.role === "admin" && (
               <Link
-                to="/admin/products"
+                to="/admin"
                 className="
                 bg-indigo-600
                 text-white
@@ -141,10 +175,7 @@ function Navbar() {
               </Link>
             )}
               <button
-                onClick={() =>
-                  dispatch(
-                    logout()
-                  )
+                onClick={handleLogout
                 }
                 className="
                 bg-red-500

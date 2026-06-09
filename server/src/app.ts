@@ -3,6 +3,8 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import authRoutes from "./routes/authRoutes";
+import adminRoutes
+from "./routes/adminRoutes";
 
 import {
   notFound,
@@ -61,6 +63,11 @@ app.use(
 app.use(
   "/api/orders",
   orderRoutes
+);
+
+app.use(
+  "/api/admin",
+  adminRoutes
 );
 
 app.use(notFound);

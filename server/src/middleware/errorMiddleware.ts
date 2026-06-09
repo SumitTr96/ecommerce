@@ -37,5 +37,11 @@ export const errorHandler =
     res.json({
       message:
         err.message,
+      stack:
+        process.env
+          .NODE_ENV ===
+        "production"
+          ? undefined
+          : err.stack,
     });
   };

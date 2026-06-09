@@ -59,3 +59,40 @@ export const getProfile = async () => {
 
   return response.data;
 };
+
+export const sendLoginOtp =
+  async (
+    credentials: {
+      email: string;
+      password: string;
+    }
+  ) => {
+
+    const response =
+      await api.post(
+        "/auth/send-login-otp",
+        credentials
+      );
+
+    return response.data;
+
+  };
+
+  export const verifyLoginOtp =
+  async (
+    email: string,
+    otp: string
+  ) => {
+
+    const response =
+      await api.post(
+        "/auth/verify-login-otp",
+        {
+          email,
+          otp,
+        }
+      );
+
+    return response.data;
+
+  };

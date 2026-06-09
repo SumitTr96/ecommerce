@@ -2,11 +2,16 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 
-import type { User } from "../../types/user";
+import type {
+  User,
+} from "../../types/user";
+
+
 
 import {
   loginThunk,
   getProfileThunk,
+  verifyLoginOtpThunk,
 } from "./authThunk";
 
 interface AuthState {
@@ -22,7 +27,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
 
-  loading: false,
+  loading: true,
 
   error: null,
 
@@ -36,51 +41,105 @@ const authSlice = createSlice({
 
   reducers: {
     logout: (state) => {
-      state.user = null;
+
+      state.user =
+        null;
 
       state.isAuthenticated =
         false;
+
+      state.loading =
+        false;
+
+      state.error =
+        null;
+
     },
   },
 
   extraReducers: (
     builder
   ) => {
+
     builder
 
       .addCase(
         loginThunk.pending,
         (state) => {
-          state.loading = true;
+
+          state.loading =
+            true;
+
+          state.error =
+            null;
+
         }
       )
 
       .addCase(
-        loginThunk.fulfilled,
-        (state, action) => {
-          state.loading = false;
+  loginThunk.fulfilled,
+  (state) => {
+
+    state.loading =
+      false;
+
+  }
+)
+
+      .addCase(
+        loginThunk.rejected,
+        (state) => {
+
+          state.loading =
+            false;
+
+          state.error =
+            "Login Failed";
+
+          state.user =
+            null;
+
+          state.isAuthenticated =
+            false;
+
+        }
+      )
+
+      .addCase(
+        getProfileThunk.pending,
+        (state) => {
+
+          state.loading =
+            true;
+
+        }
+      )
+
+      .addCase(
+        getProfileThunk.fulfilled,
+        (
+          state,
+          action
+        ) => {
+
+          state.loading =
+            false;
 
           state.user =
             action.payload.user;
 
           state.isAuthenticated =
             true;
+
         }
       )
 
       .addCase(
-        loginThunk.rejected,
-        (state) => {
-          state.loading = false;
-
-          state.error =
-            "Login Failed";
-        }
-      )
-
-      .addCase(
-  getProfileThunk.fulfilled,
+  verifyLoginOtpThunk.fulfilled,
   (state, action) => {
+
+    state.loading =
+      false;
 
     state.user =
       action.payload.user;
@@ -90,18 +149,47 @@ const authSlice = createSlice({
 
   }
 )
-
 .addCase(
-  getProfileThunk.rejected,
+  verifyLoginOtpThunk.pending,
   (state) => {
 
-    state.user = null;
+    state.loading =
+      true;
+
+  }
+)
+.addCase(
+  verifyLoginOtpThunk.rejected,
+  (state) => {
+
+    state.loading =
+      false;
+
+    state.user =
+      null;
 
     state.isAuthenticated =
       false;
 
   }
-);
+)
+
+      .addCase(
+        getProfileThunk.rejected,
+        (state) => {
+
+          state.loading =
+            false;
+
+          state.user =
+            null;
+
+          state.isAuthenticated =
+            false;
+
+        }
+      );
+
   },
 });
 

@@ -14,10 +14,13 @@ import Dashboard from "../pages/admin/Dashboard";
 import AdminProducts from "../pages/admin/Products";
 import CreateProduct from "../pages/admin/CreateProduct";
 import EditProduct from "../pages/admin/EditProduct";
-
+import PublicRoute from "./PublicRoute";
 import AdminRoute from "./AdminRoute";
+import AdminOrders from "../pages/admin/Orders";
+import AdminUsers from "../pages/admin/Users";
 
 import ProtectedRoute from "./ProtectedRoute";
+import LoginOtp from "../pages/LoginOtp";
 
 function AppRoutes() {
   return (
@@ -36,20 +39,41 @@ function AppRoutes() {
         element={<ProductDetails />}
       />
 
-      <Route
-        path="/login"
-        element={<Login />}
-      />
+<Route
+  path="/login-otp"
+  element={
+    <PublicRoute>
+      <LoginOtp />
+    </PublicRoute>
+  }
+/>
 
       <Route
-        path="/register"
-        element={<Register />}
-      />
+  path="/login"
+  element={
+    <PublicRoute>
+      <Login />
+    </PublicRoute>
+  }
+/>
 
-      <Route
-        path="/verify-otp"
-        element={<VerifyOtp />}
-      />
+<Route
+  path="/register"
+  element={
+    <PublicRoute>
+      <Register />
+    </PublicRoute>
+  }
+/>
+
+<Route
+  path="/verify-otp"
+  element={
+    <PublicRoute>
+      <VerifyOtp />
+    </PublicRoute>
+  }
+/>
 {/* Protected Routes */}
 
       <Route
@@ -123,6 +147,24 @@ function AppRoutes() {
   element={
     <AdminRoute>
       <EditProduct />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/orders"
+  element={
+    <AdminRoute>
+      <AdminOrders />
+    </AdminRoute>
+  }
+/>
+
+<Route
+  path="/admin/users"
+  element={
+    <AdminRoute>
+      <AdminUsers />
     </AdminRoute>
   }
 />

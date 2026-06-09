@@ -6,6 +6,8 @@ import {
   verifyOtp,
   getMe,
   logout,
+  sendLoginOtp,
+  verifyLoginOtp,
 } from "../controllers/authController";
 
 import {
@@ -39,6 +41,16 @@ router.get(
 router.post(
   "/logout",
   logout
+);
+
+router.post(
+  "/send-login-otp",
+  sendLoginOtp
+);
+
+router.post(
+  "/verify-login-otp",
+  verifyLoginOtp
 );
 
 export default router;

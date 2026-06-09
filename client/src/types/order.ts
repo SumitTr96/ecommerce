@@ -1,3 +1,11 @@
+export interface OrderUser {
+  _id: string;
+
+  name: string;
+
+  email: string;
+}
+
 export interface OrderItem {
   product: string;
 
@@ -16,6 +24,8 @@ export interface CreateOrderRequest {
 
 export interface Order {
   _id: string;
+
+  user: OrderUser | null;
 
   items: OrderItem[];
 

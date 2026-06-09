@@ -1,5 +1,10 @@
-import { Navigate } from "react-router-dom";
-import { useAppSelector } from "../hooks/reduxHooks";
+import {
+  Navigate,
+} from "react-router-dom";
+
+import {
+  useAppSelector,
+} from "../hooks/reduxHooks";
 
 interface Props {
   children: React.ReactNode;
@@ -8,13 +13,44 @@ interface Props {
 function ProtectedRoute({
   children,
 }: Props) {
-  const isAuthenticated =
+
+  const {
+    isAuthenticated,
+    loading,
+  } =
     useAppSelector(
-      (state) => state.auth.isAuthenticated
+      (state) =>
+        state.auth
     );
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+  if (loading) {
+
+    return (
+      <div
+        className="
+        min-h-screen
+        flex
+        items-center
+        justify-center
+        "
+      >
+        Loading...
+      </div>
+    );
+
+  }
+
+  if (
+    !isAuthenticated
+  ) {
+
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
+
   }
 
   return children;

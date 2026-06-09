@@ -28,13 +28,25 @@ function App() {
   }, [dispatch]);
 
   return (
-    <>
+    <div
+      className="
+      min-h-screen
+      flex
+      flex-col
+      "
+    >
+
       <Navbar />
 
-      <AppRoutes />
+      <main className="flex-1">
+
+        <AppRoutes />
+
+      </main>
 
       <Footer />
-    </>
+
+    </div>
   );
 }
 

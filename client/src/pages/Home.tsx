@@ -1,7 +1,15 @@
 
 import { Link } from "react-router-dom";
+import {
+  useAppSelector,
+} from "../hooks/reduxHooks";
 
 function Home() {
+  const isAuthenticated =
+  useAppSelector(
+    (state) =>
+      state.auth.isAuthenticated
+  );
   return (
     <div className="bg-slate-100">
 
@@ -86,42 +94,47 @@ function Home() {
                 mt-8
                 "
               >
-                <Link
-                  to="/products"
-                  className="
-                  bg-indigo-600
-                  text-white
-                  px-8
-                  py-4
-                  rounded-xl
-                  font-semibold
-                  text-center
+             
+    <Link
+      to="/products"
+      className="
+      bg-indigo-600
+      px-6
+      py-3
+      rounded-xl
+      text-white
+      font-semibold
+      transition
                   hover:bg-indigo-700
-                  transition
-                  shadow-lg
-                  "
-                >
-                  Shop Now
-                </Link>
-
-                <Link
-                  to="/register"
-                  className="
-                  bg-white
-                  text-slate-800
-                  px-8
-                  py-4
-                  rounded-xl
-                  font-semibold
-                  text-center
-                  border
-                  border-slate-200
                   hover:shadow-lg
-                  transition
-                  "
-                >
-                  Create Account
-                </Link>
+      "
+    >
+      Shop Now
+    </Link>
+       
+  
+    {
+  !isAuthenticated && (
+    <Link
+      to="/register"
+      className="
+      bg-indigo-600
+      px-6
+      py-3
+      rounded-xl
+      text-white
+      font-semibold
+      transition
+                  hover:bg-indigo-700
+                  hover:shadow-lg
+      "
+    >
+      Create Account
+    </Link>
+  )
+}
+  
+
               </div>
 
             </div>

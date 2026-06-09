@@ -23,10 +23,17 @@ function Login() {
   const onSubmit = async (data: LoginFormData) => {
     try {
     await dispatch(
-      loginThunk(data)
-    ).unwrap();
+  loginThunk(data)
+).unwrap();
 
-    navigate("/products");
+localStorage.setItem(
+  "loginEmail",
+  data.email
+);
+
+navigate(
+  "/login-otp"
+);
   } catch (error) {
     console.error(error);
   }

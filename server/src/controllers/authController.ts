@@ -174,12 +174,22 @@ if (
       );
 
     res.cookie(
-      "token",
-      token,
-      {
-        httpOnly: true,
-      }
-    );
+  "token",
+  token,
+  {
+    httpOnly: true,
+    sameSite: "lax",
+    secure:
+      process.env.NODE_ENV ===
+      "production",
+    maxAge:
+      7 *
+      24 *
+      60 *
+      60 *
+      1000,
+  }
+);
 
     res.json({
       token,
@@ -216,18 +226,38 @@ if (
       !user ||
       user.otp !== otp
     ) {
+
       return res
         .status(400)
         .json({
           message:
             "Invalid OTP",
         });
+
+    }
+
+    if (
+      user.otpExpiry &&
+      user.otpExpiry <
+        new Date()
+    ) {
+
+      return res
+        .status(400)
+        .json({
+          message:
+            "OTP expired",
+        });
+
     }
 
     user.isVerified =
       true;
 
     user.otp =
+      undefined;
+
+    user.otpExpiry =
       undefined;
 
     await user.save();
@@ -237,6 +267,8 @@ if (
         "OTP verified",
     });
   };
+
+  // getMe
 
   export const getMe =
   async (
@@ -255,22 +287,194 @@ if (
     });
   };
 
+  // Logout
+
   export const logout =
   async (
     req: Request,
     res: Response
   ) => {
 
-    res.cookie(
+    res.clearCookie(
       "token",
-      "",
       {
         httpOnly: true,
-        expires: new Date(0),
+        sameSite: "lax",
       }
     );
 
     res.json({
-      message: "Logged out",
+      message:
+        "Logged out",
     });
+  };
+
+  // 2FA login
+
+  export const sendLoginOtp =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+
+    const {
+      email,
+      password,
+    } = req.body;
+
+    const user =
+      await User.findOne({
+        email,
+      });
+
+    if (!user) {
+
+      return res
+        .status(401)
+        .json({
+          message:
+            "Invalid credentials",
+        });
+
+    }
+
+    const match =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
+
+    if (!match) {
+
+      return res
+        .status(401)
+        .json({
+          message:
+            "Invalid credentials",
+        });
+
+    }
+
+    const otp =
+      generateOtp();
+
+    user.otp =
+      otp;
+
+    user.otpExpiry =
+      new Date(
+        Date.now() +
+        5 * 60 * 1000
+      );
+
+    await user.save();
+
+    await sendOtp(
+      user.email,
+      otp
+    );
+
+    res.json({
+      message:
+        "Login OTP sent",
+    });
+
+  };
+
+  export const verifyLoginOtp =
+  async (
+    req: Request,
+    res: Response
+  ) => {
+
+    const {
+      email,
+      otp,
+    } = req.body;
+
+    const user =
+      await User.findOne({
+        email,
+      });
+
+    if (!user) {
+
+      return res
+        .status(400)
+        .json({
+          message:
+            "User not found",
+        });
+
+    }
+
+    if (
+      String(user.otp) !==
+      String(otp)
+    ) {
+
+      return res
+        .status(400)
+        .json({
+          message:
+            "Invalid OTP",
+        });
+
+    }
+
+    if (
+      user.otpExpiry &&
+      user.otpExpiry <
+        new Date()
+    ) {
+
+      return res
+        .status(400)
+        .json({
+          message:
+            "OTP expired",
+        });
+
+    }
+
+    user.otp =
+      undefined;
+
+    user.otpExpiry =
+      undefined;
+
+    await user.save();
+
+    const token =
+      generateToken(
+        user._id.toString()
+      );
+
+    res.cookie(
+      "token",
+      token,
+      {
+        httpOnly: true,
+        sameSite: "lax",
+        secure:
+          process.env.NODE_ENV ===
+          "production",
+      }
+    );
+
+    res.json({
+      user: {
+        _id:
+          user._id,
+        name:
+          user.name,
+        email:
+          user.email,
+        role:
+          user.role,
+        isVerified:
+          user.isVerified,
+      },
+    });
+
   };
